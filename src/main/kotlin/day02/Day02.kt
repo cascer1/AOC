@@ -1,3 +1,7 @@
+package day02
+
+import readInput
+
 fun main() {
     fun getOperation(input: String): Pair<SubmarineMovements, Int> {
         val parts = input.split(" ")
