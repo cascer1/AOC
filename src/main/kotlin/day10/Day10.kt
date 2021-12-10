@@ -1,7 +1,6 @@
 package day10
 
 import readInput
-import java.util.*
 
 val validPairs = listOf(Pair('[', ']'), Pair('(', ')'), Pair('{', '}'), Pair('<', '>'))
 val illegalClosingScores = listOf(Pair(')', 3), Pair(']', 57), Pair('}', 1197), Pair('>', 25137))
@@ -31,13 +30,13 @@ fun main() {
 }
 
 fun findErrorScore(input: String): Int {
-    val expectedClosingCharacters = Stack<Char>()
+    val expectedClosingCharacters = ArrayDeque<Char>()
 
     input.forEach { character ->
         if (validPairs.isOpening(character)) {
-            expectedClosingCharacters.push(validPairs.getClosing(character))
+            expectedClosingCharacters.addFirst(validPairs.getClosing(character))
         } else {
-            val expectedClosingCharacter = expectedClosingCharacters.pop()
+            val expectedClosingCharacter = expectedClosingCharacters.removeFirst()
 
             if (expectedClosingCharacter != character) {
                 return illegalClosingScores.score(character)
@@ -49,20 +48,20 @@ fun findErrorScore(input: String): Int {
 }
 
 fun completeLine(input: String): Long {
-    val expectedClosingCharacters = Stack<Char>()
+    val expectedClosingCharacters = ArrayDeque<Char>()
     var score = 0L
 
     input.forEach { character ->
         if (validPairs.isOpening(character)) {
-            expectedClosingCharacters.push(validPairs.getClosing(character))
+            expectedClosingCharacters.addFirst(validPairs.getClosing(character))
         } else {
-            if (expectedClosingCharacters.peek() == character) {
-                expectedClosingCharacters.pop()
+            if (expectedClosingCharacters.first() == character) {
+                expectedClosingCharacters.removeFirst()
             }
         }
     }
 
-    expectedClosingCharacters.reversed().forEach { character ->
+    expectedClosingCharacters.forEach { character ->
         score = (score * 5) + closingCompletionScores.score(character)
     }
 
