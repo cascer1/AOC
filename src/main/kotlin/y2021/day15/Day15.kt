@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalTime::class)
+
 package y2021.day15
 
 import readInput
@@ -7,7 +9,9 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
 var map: HashMap<Pair<Int, Int>, Point> = HashMap()
-var pointQueue: ArrayDeque<Point> = ArrayDeque()
+
+var width: Int = 0
+var height: Int = 0
 
 fun HashMap<Pair<Int, Int>, Point>.pointAt(x: Int, y: Int): Point? {
     return this[Pair(x, y)]
@@ -26,17 +30,10 @@ fun HashMap<Pair<Int, Int>, Point>.surroundingUnvisited(point: Point): ArrayList
     return this.surroundingUnvisited(point.x, point.y)
 }
 
-fun HashMap<Pair<Int, Int>, Point>.bounds(): Pair<Int, Int> {
-    val x = this.maxOf { it.value.x }
-    val y = this.maxOf { it.value.y }
-    return Pair(x, y)
-}
-
-fun ArrayList<Point>.score(): Int {
-    return this.drop(1).sumOf { it.risk }
-}
-
 fun parseInput(input: List<String>) {
+    width = input[0].length
+    height = input.size
+
     map.clear()
     input.forEachIndexed { y, row ->
         row.forEachIndexed { x, risk ->
@@ -45,7 +42,6 @@ fun parseInput(input: List<String>) {
     }
 }
 
-@OptIn(ExperimentalTime::class)
 fun main() {
     val testInput = readInput("Day15_test")
     parseInput(testInput)
@@ -72,47 +68,16 @@ fun part1(): Int {
 
 fun part2(): Int {
     expandMap()
-    pointQueue.clear()
     map.forEach { (_, u) ->
         u.distance = Int.MAX_VALUE
         u.visited = false
     }
+
     return findBestRoute()
 }
 
-fun expandMap() {
-    var originalWidth = map.maxOf { it.value.x }
-    val originalHeight = map.maxOf { it.value.y }
-    (1 until 5).forEach {
-        val offset = it * (originalWidth + 1)
-        val original = offset - (originalWidth + 1)
-        val difference = offset - original
-
-        (original until offset).forEach { x ->
-            (0..originalHeight).forEach { y ->
-                val originalPoint = map.pointAt(x, y)!!
-                map[Pair(x + difference, y)] = Point(x + difference, y, if (originalPoint.risk < 9) originalPoint.risk + 1 else 1)
-            }
-        }
-    }
-
-    originalWidth = map.maxOf { it.value.x }
-
-    (1 until 5).forEach {
-        val offset = it * (originalHeight + 1)
-        val original = offset - (originalHeight + 1)
-        val difference = offset - original
-
-        (0..originalWidth).forEach { x ->
-            (original until offset).forEach { y ->
-                val originalPoint = map.pointAt(x, y)!!
-                map[Pair(x, y + difference)] = Point(x, y + difference, if (originalPoint.risk < 9) originalPoint.risk + 1 else 1)
-            }
-        }
-    }
-}
-
 fun findBestRoute(): Int {
+    val pointQueue: ArrayDeque<Point> = ArrayDeque()
     val start = map.pointAt(0, 0)!!
     start.distance = 0
     pointQueue.add(start)
@@ -122,44 +87,50 @@ fun findBestRoute(): Int {
         currentPoint.visited = true
 
         map.surroundingUnvisited(currentPoint).forEach { point ->
-            val minDistance = point.distance.coerceAtMost(currentPoint.distance + point.risk)
-
-            if (minDistance != point.distance) {
-                point.distance = minDistance
-
-                if (!pointQueue.contains(point)) {
-                    pointQueue.add(point)
-                }
-                pointQueue.sort()
+            point.distance = point.distance.coerceAtMost(currentPoint.distance + point.risk)
+            if (!pointQueue.contains(point)) {
+                pointQueue.add(point)
             }
         }
     }
 
-    val bounds = map.bounds()
-    val finish = map.pointAt(bounds.first, bounds.second)!!
+    val finish: Point = map.pointAt(width - 1, height - 1)!!
     return finish.distance
 }
 
+fun expandMap() {
+    var originalWidth = width - 1
 
-data class Point(var x: Int, var y: Int, var risk: Int, var distance: Int = Int.MAX_VALUE, var visited: Boolean = false) : Comparable<Point> {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
+    (1 until 5).forEach {
+        val offset = it * (originalWidth + 1)
+        val original = offset - (originalWidth + 1)
+        val difference = offset - original
 
-        other as Point
-
-        return (x == other.x && y == other.y)
+        (original until offset).forEach { x ->
+            (0 until height).forEach { y ->
+                val originalPoint = map.pointAt(x, y)!!
+                map[Pair(x + difference, y)] = Point(x + difference, y, if (originalPoint.risk < 9) originalPoint.risk + 1 else 1)
+            }
+        }
     }
 
-    override fun hashCode(): Int {
-        return 31 * x + y
+    originalWidth = width * 5 - 1
+
+    (1 until 5).forEach {
+        val offset = it * height
+        val original = offset - height
+        val difference = offset - original
+
+        (0..originalWidth).forEach { x ->
+            (original until offset).forEach { y ->
+                val originalPoint = map.pointAt(x, y)!!
+                map[Pair(x, y + difference)] = Point(x, y + difference, if (originalPoint.risk < 9) originalPoint.risk + 1 else 1)
+            }
+        }
     }
 
-    override fun toString(): String {
-        return "Point([$x, $y] dst: $distance, risk: $risk)"
-    }
-
-    override fun compareTo(other: Point): Int {
-        return this.distance.compareTo(other.distance)
-    }
+    width *= 5
+    height *= 5
 }
+
+data class Point(var x: Int, var y: Int, var risk: Int, var distance: Int = Int.MAX_VALUE, var visited: Boolean = false)
