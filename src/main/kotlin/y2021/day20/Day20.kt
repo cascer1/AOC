@@ -17,17 +17,38 @@ fun Array<Array<Boolean>>.getAt(x: Int, y: Int, unknown: Boolean): Boolean {
 
 fun Array<Array<Boolean>>.getSurrounding(x: Int, y: Int, unknown: Boolean): Int {
     val replacement = if (algorithm[0]) unknown else false
-    return arrayOf(
-            this.getAt(x - 1, y - 1, replacement),
-            this.getAt(x, y - 1, replacement),
-            this.getAt(x + 1, y - 1, replacement),
-            this.getAt(x - 1, y, replacement),
-            this.getAt(x, y, replacement),
-            this.getAt(x + 1, y, replacement),
-            this.getAt(x - 1, y + 1, replacement),
-            this.getAt(x, y + 1, replacement),
-            this.getAt(x + 1, y + 1, replacement)
-    ).map { if (it) "1" else "0" }.reduce { acc, s -> acc + s }.toInt(2)
+    var result = 0
+
+    // This looks stupid, but it's 4x faster than making a list and iterating over it
+    if (this.getAt(x - 1, y - 1, replacement)) {
+        result += 256
+    }
+    if (this.getAt(x, y - 1, replacement)) {
+        result += 128
+    }
+    if (this.getAt(x + 1, y - 1, replacement)) {
+        result += 64
+    }
+    if (this.getAt(x - 1, y, replacement)) {
+        result += 32
+    }
+    if (this.getAt(x, y, replacement)) {
+        result += 16
+    }
+    if (this.getAt(x + 1, y, replacement)) {
+        result += 8
+    }
+    if (this.getAt(x - 1, y + 1, replacement)) {
+        result += 4
+    }
+    if (this.getAt(x, y + 1, replacement)) {
+        result += 2
+    }
+    if (this.getAt(x + 1, y + 1, replacement)) {
+        result += 1
+    }
+
+    return result
 }
 
 fun main() {
