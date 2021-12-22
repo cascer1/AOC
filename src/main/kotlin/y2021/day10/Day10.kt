@@ -1,4 +1,4 @@
-package y2021
+package y2021.day10
 
 import readInput
 
