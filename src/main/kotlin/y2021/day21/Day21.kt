@@ -2,18 +2,19 @@
 
 package y2021.day21
 
+import addCount
 import readInput
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
-var playerOneStart = 0
-var playerTwoStart = 0
-var lastRoll = 0
-var rollCount = 0
+private var playerOneStart = 0
+private var playerTwoStart = 0
+private var lastRoll = 0
+private var rollCount = 0
 
-fun main() {
+private fun main() {
     val testInput = readInput("Day21_test")
     parseInput(testInput)
     check(part1() == 739785)
@@ -32,22 +33,7 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun parseInput(input: List<String>) {
-    playerOneStart = input[0].removePrefix("Player 1 starting position: ").toInt()
-    playerTwoStart = input[1].removePrefix("Player 2 starting position: ").toInt()
-}
-
-fun getDieRoll(): Int {
-    rollCount++
-    return if (lastRoll < 100) {
-        ++lastRoll
-    } else {
-        lastRoll = 1
-        1
-    }
-}
-
-fun part1(): Int {
+private fun part1(): Int {
     val game = Game(Player(1, playerOneStart, 0), Player(2, playerTwoStart, 0))
 
     do {
@@ -59,15 +45,7 @@ fun part1(): Int {
     return game.getLoser().score * game.totalRollCount
 }
 
-fun HashMap<Game, Long>.addCount(game: Game, count: Long) {
-    if (this.containsKey(game)) {
-        this[game] = this[game]!! + count
-    } else {
-        this[game] = count
-    }
-}
-
-fun part2(): Long {
+private fun part2(): Long {
     var states: HashMap<Game, Long> = hashMapOf()
     val startGame = Game(Player(1, playerOneStart, 0), Player(2, playerTwoStart, 0))
     states[startGame] = 1
@@ -94,14 +72,28 @@ fun part2(): Long {
             .maxOf { it.value }
 }
 
-fun simulateRoll(game: Game): List<Game> {
+private fun parseInput(input: List<String>) {
+    playerOneStart = input[0].removePrefix("Player 1 starting position: ").toInt()
+    playerTwoStart = input[1].removePrefix("Player 2 starting position: ").toInt()
+}
+
+private fun getDieRoll(): Int {
+    rollCount++
+    return if (lastRoll < 100) {
+        ++lastRoll
+    } else {
+        lastRoll = 1
+        1
+    }
+}
+
+private fun simulateRoll(game: Game): List<Game> {
     val games = listOf(game.deepCopy(), game.deepCopy(), game.deepCopy())
 
     games.forEachIndexed { index, thisGame -> thisGame.roll(index + 1) }
 
     return games
 }
-
 
 data class Player(var name: Int, var position: Int, var score: Int) {
     fun move(roll: Int) {

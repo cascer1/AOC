@@ -1,17 +1,25 @@
 package y2021.day14
 
+import addCount
 import readInput
 
-var instructions: HashMap<String, Rule> = HashMap()
-var state: HashMap<String, Long> = HashMap()
-var startCharacter: Char = 'a'
+private var instructions: HashMap<String, Rule> = HashMap()
+private var state: HashMap<String, Long> = HashMap()
+private var startCharacter: Char = 'a'
 
-fun HashMap<String, Long>.addCount(sequence: String, amount: Long) {
-    val old = this.getOrDefault(sequence, 0L)
-    this[sequence] = old + amount
+private fun main() {
+    val testInput = readInput("Day14_test")
+    parseInput(testInput)
+    check(doTheThing(10) == 1588L)
+    check(doTheThing(30) == 2188189693529L)
+
+    val input = readInput("Day14")
+    parseInput(input)
+    println(doTheThing(10))
+    println(doTheThing(30))
 }
 
-fun parseInput(input: List<String>) {
+private fun parseInput(input: List<String>) {
     instructions.clear()
     state.clear()
 
@@ -24,20 +32,7 @@ fun parseInput(input: List<String>) {
     }
 }
 
-fun main() {
-    val testInput = readInput("Day14_test")
-    parseInput(testInput)
-    check(doTheThing(10) == 1588L)
-    check(doTheThing(30) == 2188189693529L)
-
-    val input = readInput("Day14")
-    parseInput(input)
-    println(doTheThing(10))
-    println(doTheThing(30))
-}
-
-
-fun doTheThing(count: Int): Long {
+private fun doTheThing(count: Int): Long {
     repeat(count) {
         val newState: HashMap<String, Long> = HashMap()
         state.forEach { (sequence, amount) ->
@@ -61,7 +56,7 @@ fun doTheThing(count: Int): Long {
     return finalCount.last().second - finalCount.first().second
 }
 
-data class Rule(val from: String, val to: String) {
+private data class Rule(val from: String, val to: String) {
     val replacements: List<String>
         get() = listOf("${from[0]}$to", "$to${from[1]}")
 }

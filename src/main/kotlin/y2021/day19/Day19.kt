@@ -9,35 +9,36 @@ import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
-val scanners: HashSet<Scanner> = hashSetOf()
+private val scanners: HashSet<Scanner> = hashSetOf()
 
-fun HashSet<Scanner>.addBeacon(scanner: Int, beacon: Beacon) {
+private fun HashSet<Scanner>.addBeacon(scanner: Int, beacon: Beacon) {
     this.first { it.id == scanner }.beacons.add(beacon)
 }
 
-fun Set<Distance>.matchCount(other: Set<Distance>): Int {
-    val result = this.count { other.contains(it) }
-    return result
+private fun Set<Distance>.matchCount(other: Set<Distance>): Int {
+    return count { other.contains(it) }
 }
 
-fun main() {
+private fun main() {
     val testInput = readInput("Day19_test")
-    check(part1(testInput) == 79)
-    check(part2(testInput) == 3621)
+    parseInput(testInput)
+    check(part1() == 79)
+    check(part2() == 3621)
 
     val input = readInput("Day19")
+    parseInput(input)
     val part1Duration: Duration = measureTime {
-        println(part1(input))
+        println(part1())
     }
     val part2Duration: Duration = measureTime {
-        println(part2(input))
+        println(part2())
     }
 
     println("Part 1 time: ${part1Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun parseInput(input: List<String>) {
+private fun parseInput(input: List<String>) {
     scanners.clear()
     var currentScanner = 0
 
@@ -61,8 +62,7 @@ fun parseInput(input: List<String>) {
     }
 }
 
-fun part1(input: List<String>): Int {
-    parseInput(input)
+private fun part1(): Int {
 
     do {
         scanners.filter { it.positionKnown }.forEach { anchor ->
@@ -77,7 +77,7 @@ fun part1(input: List<String>): Int {
     return beaconUnique.size
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(): Int {
     return scanners.maxOf { firstScanner ->
         scanners.maxOf { secondScanner ->
             abs(firstScanner.x!! - secondScanner.x!!) + abs(firstScanner.y!! - secondScanner.y!!) + abs(firstScanner.z!! - secondScanner.z!!)
@@ -85,7 +85,7 @@ fun part2(input: List<String>): Int {
     }
 }
 
-fun matchScanners(anchor: Scanner, target: Scanner) {
+private fun matchScanners(anchor: Scanner, target: Scanner) {
     if (target.positionKnown) {
         return
     }
@@ -127,7 +127,7 @@ fun matchScanners(anchor: Scanner, target: Scanner) {
     }
 }
 
-fun translateScanner(anchor: Scanner, target: Scanner): Boolean {
+private fun translateScanner(anchor: Scanner, target: Scanner): Boolean {
     val translationX: ArrayList<Int> = arrayListOf()
     val translationY: ArrayList<Int> = arrayListOf()
     val translationZ: ArrayList<Int> = arrayListOf()
@@ -160,7 +160,7 @@ fun translateScanner(anchor: Scanner, target: Scanner): Boolean {
     return false
 }
 
-data class Scanner(val id: Int, var x: Int? = null, var y: Int? = null, var z: Int? = null) {
+private data class Scanner(val id: Int, var x: Int? = null, var y: Int? = null, var z: Int? = null) {
     var positionKnown: Boolean = false
     var beacons: HashSet<Beacon> = hashSetOf()
 
@@ -240,7 +240,7 @@ data class Scanner(val id: Int, var x: Int? = null, var y: Int? = null, var z: I
     }
 }
 
-data class Beacon(var x: Int, var y: Int, var z: Int) {
+private data class Beacon(var x: Int, var y: Int, var z: Int) {
     var distances: HashSet<Distance> = hashSetOf()
 
     fun matchesBeacon(other: Beacon): Boolean {
@@ -253,4 +253,4 @@ data class Beacon(var x: Int, var y: Int, var z: Int) {
     }
 }
 
-data class Distance(var x: Int, var y: Int, var z: Int)
+private data class Distance(var x: Int, var y: Int, var z: Int)

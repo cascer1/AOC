@@ -8,7 +8,7 @@ import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
-fun main() {
+private fun main() {
     val testInput = readInput("Day18_test")
     check(part1(testInput) == 4140)
     check(part2(testInput) == 3993)
@@ -26,8 +26,7 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     val numbers = input.map { ArrayDeque(it.toList()) }.map {
         it.removeFirst()
         parseNumber(it)
@@ -38,7 +37,7 @@ fun part1(input: List<String>): Int {
     return result.magnitude
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     return input.indices.flatMap { firstIndex ->
         input.indices.map { secondIndex ->
             firstIndex to secondIndex
@@ -48,13 +47,13 @@ fun part2(input: List<String>): Int {
         .maxOf { (firstIndex, secondIndex) -> (parseNumber(input[firstIndex]) + parseNumber(input[secondIndex])).magnitude }
 }
 
-fun parseNumber(input: String): SnailNumber {
+private fun parseNumber(input: String): SnailNumber {
     val deque = ArrayDeque(input.toList())
     deque.removeFirst()
     return parseNumber(deque)
 }
 
-fun parseNumber(input: ArrayDeque<Char>, parent: SnailNumber? = null): SnailNumber {
+private fun parseNumber(input: ArrayDeque<Char>, parent: SnailNumber? = null): SnailNumber {
     val result = SnailNumber()
     result.parent = parent
 
@@ -89,7 +88,7 @@ fun parseNumber(input: ArrayDeque<Char>, parent: SnailNumber? = null): SnailNumb
     return result
 }
 
-class SnailNumber() {
+private class SnailNumber() {
     var left: SnailNumber? = null
     var right: SnailNumber? = null
     var value: Int? = null

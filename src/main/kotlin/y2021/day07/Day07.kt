@@ -3,7 +3,7 @@ package y2021.day07
 import readInput
 import kotlin.math.abs
 
-fun main() {
+private fun main() {
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day07_test")
     check(part1(testInput) == 37L)
@@ -14,8 +14,7 @@ fun main() {
     println(part2(input))
 }
 
-
-fun part1(input: List<String>): Long {
+private fun part1(input: List<String>): Long {
     val crabs = parseCrabs(input)
 
     val lowestPosition = crabs.keys.minOf { it }
@@ -33,7 +32,7 @@ fun part1(input: List<String>): Long {
     return lowest
 }
 
-fun part2(input: List<String>): Long {
+private fun part2(input: List<String>): Long {
     val crabs = parseCrabs(input)
 
     val lowestPosition = crabs.keys.minOf { it }
@@ -62,7 +61,7 @@ private fun parseCrabs(input: List<String>): Map<Long, Long> {
             .mapValues { (_, v) -> v.toLong() }
 }
 
-fun calculateMovementCost(distance: Long): Int {
+private fun calculateMovementCost(distance: Long): Int {
     var step = 1
     var cost = 0
 

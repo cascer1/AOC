@@ -2,11 +2,11 @@ package y2021.day03
 
 import readInput
 
-fun String.invert() = this.map { if (it == '0') '1' else '0' }.joinToString("")
-fun List<String>.charactersForColumn(index: Int): Map<Char, Int> = this.groupingBy { it[index] }.eachCount()
-var bitIndices: IntRange = (0..1)
+private fun String.invert() = this.map { if (it == '0') '1' else '0' }.joinToString("")
+private fun List<String>.charactersForColumn(index: Int): Map<Char, Int> = this.groupingBy { it[index] }.eachCount()
+private var bitIndices: IntRange = (0..1)
 
-fun main() {
+private fun main() {
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day03_test")
     check(part1(testInput) == 198)
@@ -17,7 +17,7 @@ fun main() {
     println(part2(input))
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     val lineLength = input[0].length
     val oneCount = IntArray(lineLength)
 
@@ -45,7 +45,7 @@ fun part1(input: List<String>): Int {
     return gamma * epsilon
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     bitIndices = input[0].indices
     val oxyGenRating = input.filterColumnsForCharacter { zeroes, ones ->
         if (zeroes > ones) '0' else '1'
@@ -58,7 +58,7 @@ fun part2(input: List<String>): Int {
     return oxyGenRating.toInt(2) * co2ScrubberRating.toInt(2)
 }
 
-fun List<String>.filterColumnsForCharacter(desiredCharacterByFrequency: (zeroes: Int, ones: Int) -> Char): String {
+private fun List<String>.filterColumnsForCharacter(desiredCharacterByFrequency: (zeroes: Int, ones: Int) -> Char): String {
     var candidateList = this
     for (column in bitIndices) {
         val charFrequencyByColumn = candidateList.charactersForColumn(column)

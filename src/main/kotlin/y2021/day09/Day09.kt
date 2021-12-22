@@ -1,10 +1,11 @@
 package y2021.day09
 
+import getAt
 import readInput
 
-var heightMap: Array<Array<Point>> = emptyArray()
+private var heightMap: Array<Array<Point>> = emptyArray()
 
-fun main() {
+private fun main() {
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day09_test")
     heightMap = parseInput(testInput)
@@ -17,7 +18,25 @@ fun main() {
     println(part2())
 }
 
-fun parseInput(input: List<String>): Array<Array<Point>> {
+private fun part1(): Int {
+    return heightMap.sumOf { row ->
+        row.filter { point -> isLowestPoint(point) }.sumOf { it.dangerScore }
+    }
+}
+
+private fun part2(): Int {
+    return heightMap
+            .flatMap { it.filter { point -> point.lowest } }
+            .asSequence()
+            .map { determineBasin(it) }
+            .distinct()
+            .sortedByDescending { it.size }
+            .take(3)
+            .map { it.size }
+            .reduce { a, b -> a * b }
+}
+
+private fun parseInput(input: List<String>): Array<Array<Point>> {
     return input.mapIndexed { rowIndex, row ->
         row.mapIndexed { colIndex, height ->
             Point(colIndex, rowIndex, height.toString().toInt())
@@ -25,11 +44,7 @@ fun parseInput(input: List<String>): Array<Array<Point>> {
     }.toTypedArray()
 }
 
-fun Array<Array<Point>>.getAt(x: Int, y: Int): Point? {
-    return this.getOrNull(y)?.getOrNull(x)
-}
-
-fun Array<Array<Point>>.getSurrounding(point: Point): Set<Point> {
+private fun Array<Array<Point>>.getSurrounding(point: Point): Set<Point> {
     val above = this.getAt(point.x, point.y + 1)
     val below = this.getAt(point.x, point.y - 1)
     val left = this.getAt(point.x - 1, point.y)
@@ -38,7 +53,7 @@ fun Array<Array<Point>>.getSurrounding(point: Point): Set<Point> {
     return setOfNotNull(above, below, left, right)
 }
 
-fun isLowestPoint(point: Point): Boolean {
+private fun isLowestPoint(point: Point): Boolean {
     val surrounding = heightMap.getSurrounding(point)
 
     val lowest = surrounding.all { it.height > point.height }
@@ -52,25 +67,7 @@ fun isLowestPoint(point: Point): Boolean {
     return lowest
 }
 
-fun part1(): Int {
-    return heightMap.sumOf { row ->
-        row.filter { point -> isLowestPoint(point) }.sumOf { it.dangerScore }
-    }
-}
-
-fun part2(): Int {
-    return heightMap
-            .flatMap { it.filter { point -> point.lowest } }
-            .asSequence()
-            .map { determineBasin(it) }
-            .distinct()
-            .sortedByDescending { it.size }
-            .take(3)
-            .map { it.size }
-            .reduce { a, b -> a * b }
-}
-
-fun determineBasin(point: Point): Set<Point> {
+private fun determineBasin(point: Point): Set<Point> {
     var currentBasin = setOf(point)
     var newBasin: Set<Point>
 
@@ -83,7 +80,7 @@ fun determineBasin(point: Point): Set<Point> {
     }
 }
 
-fun expandBasin(basin: Set<Point>): Set<Point> {
+private fun expandBasin(basin: Set<Point>): Set<Point> {
     val newBasin = basin.toMutableSet()
 
     basin.forEach { point ->
@@ -93,7 +90,7 @@ fun expandBasin(basin: Set<Point>): Set<Point> {
     return newBasin
 }
 
-data class Point(var x: Int, var y: Int, var height: Int, var lowest: Boolean = false) {
+private data class Point(var x: Int, var y: Int, var height: Int, var lowest: Boolean = false) {
     val dangerScore: Int
         get() = height + 1
 }

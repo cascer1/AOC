@@ -8,10 +8,10 @@ import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
-var targetX = (0..0)
-var targetY = (0..0)
+private var targetX = (0..0)
+private var targetY = (0..0)
 
-fun main() {
+private fun main() {
     targetX = (20..30)
     targetY = (-10..-5)
     check(part1() == 45)
@@ -30,7 +30,28 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun calculateYVelocities(): MutableSet<Int> {
+private fun part1(): Int {
+
+    var count = 0
+    (1 until targetY.maxOf { it.absoluteValue }.absoluteValue).forEach { step ->
+        count += step
+    }
+
+    return count
+}
+
+private fun part2(): Int {
+    val xVelocities = calculateXVelocities()
+    val yVelocities = calculateYVelocities()
+
+    return xVelocities.flatMap { x ->
+        yVelocities.map { y ->
+            x to y
+        }
+    }.filter { startVelocityIsValid(it.first, it.second) }.size
+}
+
+private fun calculateYVelocities(): MutableSet<Int> {
     val result: MutableSet<Int> = mutableSetOf()
 
     startVelocity@ for (startVelocity in targetY.first..10000) {
@@ -49,7 +70,7 @@ fun calculateYVelocities(): MutableSet<Int> {
     return result
 }
 
-fun calculateXVelocities(): MutableSet<Int> {
+private fun calculateXVelocities(): MutableSet<Int> {
     val result: MutableSet<Int> = mutableSetOf()
 
     startVelocity@ for (startVelocity in 0..targetX.last) {
@@ -71,10 +92,10 @@ fun calculateXVelocities(): MutableSet<Int> {
     return result
 }
 
-fun startVelocityIsValid(xSpeed: Int, ySpeed: Int): Boolean {
+private fun startVelocityIsValid(xSpeed: Int, ySpeed: Int): Boolean {
     var x = 0
     var y = 0
-    var xVelocity= xSpeed
+    var xVelocity = xSpeed
     var yVelocity = ySpeed
     do {
         x += xVelocity
@@ -89,25 +110,4 @@ fun startVelocityIsValid(xSpeed: Int, ySpeed: Int): Boolean {
     } while (y >= targetY.first)
 
     return false
-}
-
-fun part1(): Int {
-
-    var count = 0
-    (1 until targetY.maxOf { it.absoluteValue }.absoluteValue).forEach { step ->
-        count += step
-    }
-
-    return count
-}
-
-fun part2(): Int {
-    val xVelocities = calculateXVelocities()
-    val yVelocities = calculateYVelocities()
-
-    return xVelocities.flatMap { x ->
-        yVelocities.map { y ->
-            x to y
-        }
-    }.filter { startVelocityIsValid(it.first, it.second) }.size
 }

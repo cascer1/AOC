@@ -2,19 +2,15 @@ package y2021.day12
 
 import readInput
 
-var caves: HashSet<Cave> = HashSet()
-var routes: HashSet<ArrayList<Cave>> = HashSet()
+private var caves: HashSet<Cave> = HashSet()
+private var routes: HashSet<ArrayList<Cave>> = HashSet()
 
-fun HashSet<Cave>.contains(name: String): Boolean {
-    return this.any { it.name == name }
-}
-
-fun HashSet<Cave>.addConnection(from: String, to: String) {
-    if (!this.contains(from)) {
+private fun HashSet<Cave>.addConnection(from: String, to: String) {
+    if (!this.any { it.name == from }) {
         this.add(Cave(from, from.uppercase() == from))
     }
 
-    if (!this.contains(to)) {
+    if (!this.any { it.name == to }) {
         this.add(Cave(to, to.uppercase() == to))
     }
 
@@ -22,11 +18,11 @@ fun HashSet<Cave>.addConnection(from: String, to: String) {
     this.find(to)!!.addConnection(this.find(from)!!)
 }
 
-fun HashSet<Cave>.find(name: String): Cave? {
+private fun HashSet<Cave>.find(name: String): Cave? {
     return this.firstOrNull { it.name == name }
 }
 
-fun parseInput(input: List<String>) {
+private fun parseInput(input: List<String>) {
     caves.clear()
     routes.clear()
     caves.add(Cave("start", false))
@@ -37,7 +33,7 @@ fun parseInput(input: List<String>) {
     }
 }
 
-fun main() {
+private fun main() {
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day12_test")
     parseInput(testInput)
@@ -50,13 +46,13 @@ fun main() {
     println(part2())
 }
 
-fun part1(): Int {
+private fun part1(): Int {
     getRouteCount(listOf(caves.find("start")!!))
 
     return routes.size
 }
 
-fun part2(): Int {
+private fun part2(): Int {
     caves.filter { !it.large }
             .filter { it.name != "start" && it.name != "end" }
             .forEach { doubleCave ->
@@ -66,7 +62,7 @@ fun part2(): Int {
     return routes.size
 }
 
-fun getRouteCount(routeSoFar: List<Cave>, doubleCave: Cave? = null) {
+private fun getRouteCount(routeSoFar: List<Cave>, doubleCave: Cave? = null) {
     if (routeSoFar.last().name == "end") {
         routes.add(ArrayList(routeSoFar))
         return
@@ -82,7 +78,7 @@ fun getRouteCount(routeSoFar: List<Cave>, doubleCave: Cave? = null) {
     options.forEach { getRouteCount(routeSoFar + it, doubleCave) }
 }
 
-data class Cave(val name: String, val large: Boolean, var connections: HashSet<Cave> = HashSet()) {
+private data class Cave(val name: String, val large: Boolean, var connections: HashSet<Cave> = HashSet()) {
     fun addConnection(cave: Cave) {
         connections.add(cave)
     }

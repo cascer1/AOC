@@ -6,12 +6,12 @@ import java.util.function.IntPredicate
 import kotlin.math.abs
 import kotlin.math.min
 
-var parsedMap = HashMap<Int, HashMap<Int, Int>>()
-var lines: List<Line> = emptyList()
-var maxX = 0
-var maxY = 0
+private var parsedMap = HashMap<Int, HashMap<Int, Int>>()
+private var lines: List<Line> = emptyList()
+private var maxX = 0
+private var maxY = 0
 
-fun main() {
+private fun main() {
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day05_test")
     check(part1(testInput) == 5)
@@ -22,7 +22,7 @@ fun main() {
     println(part2(input))
 }
 
-fun drawStraightLine(line: Line) {
+private fun drawStraightLine(line: Line) {
     (line.startY..line.endY).forEach { y ->
         if (!parsedMap.containsKey(y)) {
             parsedMap[y] = HashMap()
@@ -34,7 +34,7 @@ fun drawStraightLine(line: Line) {
     }
 }
 
-fun drawDiagonalLine(line: Line) {
+private fun drawDiagonalLine(line: Line) {
     val increasingHorizontal = line.start.x < line.end.x
     val increasingVertical = line.start.y < line.end.y
     val steps = abs(line.startX - line.endX)
@@ -47,7 +47,7 @@ fun drawDiagonalLine(line: Line) {
     }
 }
 
-fun initializeMap() {
+private fun initializeMap() {
     (0..maxY).forEach { y ->
         parsedMap[y] = HashMap()
 
@@ -57,7 +57,7 @@ fun initializeMap() {
     }
 }
 
-fun parseMap(includeDiagnoal: Boolean = false) {
+private fun parseMap(includeDiagnoal: Boolean = false) {
     initializeMap()
 
     lines.forEach { line ->
@@ -69,7 +69,7 @@ fun parseMap(includeDiagnoal: Boolean = false) {
     }
 }
 
-fun drawMap() {
+private fun drawMap() {
     (0..maxY).forEach { y ->
         (0..maxX).forEach { x ->
             print(parsedMap[y]!![x])
@@ -78,7 +78,7 @@ fun drawMap() {
     }
 }
 
-fun countOccurence(predicate: IntPredicate): Int {
+private fun countOccurence(predicate: IntPredicate): Int {
     var result = 0
     (0..maxY).forEach { y ->
         (0..maxX).forEach { x ->
@@ -91,23 +91,19 @@ fun countOccurence(predicate: IntPredicate): Int {
     return result
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     lines = input.map { Line(it) }
     parseMap(includeDiagnoal = false)
-//    drawMap()
-
     return countOccurence { it >= 2 }
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     lines = input.map { Line(it) }
     parseMap(includeDiagnoal = true)
-    drawMap()
-
     return countOccurence { it >= 2 }
 }
 
-data class Coordinate(var x: Int, var y: Int) {
+private data class Coordinate(var x: Int, var y: Int) {
     init {
         if (x > maxX) {
             maxX = x
@@ -119,7 +115,7 @@ data class Coordinate(var x: Int, var y: Int) {
     }
 }
 
-data class Line(val description: String) {
+private data class Line(val description: String) {
     val start: Coordinate
     val end: Coordinate
 

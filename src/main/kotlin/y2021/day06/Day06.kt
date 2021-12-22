@@ -2,7 +2,7 @@ package y2021.day06
 
 import readInput
 
-fun main() {
+private fun main() {
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day06_test")
     check(simulateFishes(testInput, 80) == 5934L)
@@ -13,7 +13,7 @@ fun main() {
     println(simulateFishes(input, 256))
 }
 
-fun growFishes(fishes: Map<Int, Long>): Map<Int, Long> {
+private fun growFishes(fishes: Map<Int, Long>): Map<Int, Long> {
     val returned = HashMap<Int, Long>()
 
     fishes.forEach { (age, count) ->
@@ -29,7 +29,7 @@ fun growFishes(fishes: Map<Int, Long>): Map<Int, Long> {
     return returned
 }
 
-fun simulateFishes(input: List<String>, days: Int): Long {
+private fun simulateFishes(input: List<String>, days: Int): Long {
     var fishes = input[0].split(",")
             .groupingBy { it }
             .eachCount()

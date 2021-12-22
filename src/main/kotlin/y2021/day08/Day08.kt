@@ -3,9 +3,9 @@ package y2021.day08
 import readInput
 
 // Key = length, Value = number
-val knownNumberLengths = setOf(2, 3, 4, 7)
+private val knownNumberLengths = setOf(2, 3, 4, 7)
 
-fun main() {
+private fun main() {
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day08_test")
     check(part1(testInput) == 26)
@@ -16,14 +16,14 @@ fun main() {
     println(part2(input))
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     return input.sumOf {
         it.split("|").last().split(" ")
                 .count { knownNumberLengths.contains(it.length) }
     }
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     return input.sumOf { line ->
         val (left, right) = line.split(" | ")
         val wires = left.split(' ').map { it.toSet() }.groupBy { it.size }

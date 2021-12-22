@@ -3,22 +3,13 @@
 package y2021.day16
 
 import readInput
+import takeFirst
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
-fun ArrayDeque<Char>.takeFirst(count: Int): String {
-    val result = ArrayList<Char>()
-
-    repeat(count) {
-        result.add(this.removeFirst())
-    }
-
-    return result.joinToString("")
-}
-
-fun main() {
+private fun main() {
     check(part1("D2FE28") == 6)
     check(part1("8A004A801A8002F478") == 16)
     check(part1("620080001611562C8802118E34") == 12)
@@ -46,7 +37,21 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun convertToBinary(input: String): ArrayDeque<Char> {
+private fun part1(input: String): Int {
+    val binary = convertToBinary(input)
+    val packets = parseBinary(binary)
+
+    return packets.sumOf { it.totalVersion }
+}
+
+private fun part2(input: String): Long {
+    val binary = convertToBinary(input)
+    val packets = parseBinary(binary)
+
+    return packets.sumOf { it.answer() }
+}
+
+private fun convertToBinary(input: String): ArrayDeque<Char> {
     val converted = input.map { it.toString().toInt(16).toByte() }
             .map { it.toString(2).padStart(4, '0') }
             .reduce { acc, s -> acc + s }
@@ -55,7 +60,7 @@ fun convertToBinary(input: String): ArrayDeque<Char> {
     return ArrayDeque(converted)
 }
 
-fun parseBinary(input: ArrayDeque<Char>): ArrayList<Packet> {
+private fun parseBinary(input: ArrayDeque<Char>): ArrayList<Packet> {
     val packets = ArrayList<Packet>()
     while (!input.isEmpty() && !input.all { it == '0' }) {
         packets.add(parsePacket(input))
@@ -63,7 +68,7 @@ fun parseBinary(input: ArrayDeque<Char>): ArrayList<Packet> {
     return packets
 }
 
-fun parsePacket(input: ArrayDeque<Char>): Packet {
+private fun parsePacket(input: ArrayDeque<Char>): Packet {
     val thisPacket = Packet()
     thisPacket.version = input.takeFirst(3).toInt(2)
     thisPacket.type = input.takeFirst(3).toInt(2)
@@ -77,7 +82,7 @@ fun parsePacket(input: ArrayDeque<Char>): Packet {
     return thisPacket
 }
 
-fun completeBasicPacket(packet: Packet, input: ArrayDeque<Char>) {
+private fun completeBasicPacket(packet: Packet, input: ArrayDeque<Char>) {
     var groupType: Char
     do {
         // Loop through groups of bits until one is prefixed with 0
@@ -88,7 +93,7 @@ fun completeBasicPacket(packet: Packet, input: ArrayDeque<Char>) {
     } while (groupType == '1')
 }
 
-fun completeComplexPacket(packet: Packet, input: ArrayDeque<Char>) {
+private fun completeComplexPacket(packet: Packet, input: ArrayDeque<Char>) {
     val lengthType = input.removeFirst()
 
     if (lengthType == '0') {
@@ -105,21 +110,7 @@ fun completeComplexPacket(packet: Packet, input: ArrayDeque<Char>) {
     }
 }
 
-fun part1(input: String): Int {
-    val binary = convertToBinary(input)
-    val packets = parseBinary(binary)
-
-    return packets.sumOf { it.totalVersion }
-}
-
-fun part2(input: String): Long {
-    val binary = convertToBinary(input)
-    val packets = parseBinary(binary)
-
-    return packets.sumOf { it.answer() }
-}
-
-data class Packet(var version: Int = 0, var type: Int = 0, var numberString: String = "", var subPackets: ArrayList<Packet> = ArrayList()) {
+private data class Packet(var version: Int = 0, var type: Int = 0, var numberString: String = "", var subPackets: ArrayList<Packet> = ArrayList()) {
     val number: Long
         get() = numberString.toLong(2)
 

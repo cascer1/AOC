@@ -1,6 +1,5 @@
 import java.io.File
-import java.math.BigInteger
-import java.security.MessageDigest
+import java.util.function.Predicate
 import kotlin.math.max
 import kotlin.math.min
 
@@ -10,9 +9,55 @@ import kotlin.math.min
 fun readInput(name: String) = File("inputs", "2021/$name.txt").readLines()
 
 /**
- * Converts string to md5 hash.
+ * Get the item at index[x][y], or return the unknonw value if none is found
  */
-fun String.md5(): String = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray())).toString(16)
+fun <T> Array<Array<T>>.getAt(x: Int, y: Int, unknown: T): T {
+    return this.getAt(x, y) ?: unknown
+}
+
+fun <T> Array<Array<T>>.getAt(x: Int, y: Int): T? {
+    return this.getOrNull(y)?.getOrNull(x)
+}
+
+fun <T> HashMap<Pair<Int, Int>, T>.getAt(x: Int, y: Int): T? {
+    return this[Pair(x, y)]
+}
+
+fun <K> HashMap<K, Long>.addCount(sequence: K, amount: Long) {
+    val old = this.getOrDefault(sequence, 0L)
+    this[sequence] = old + amount
+}
+
+fun <T> Array<Array<T>>.allMatch(predicate: Predicate<T>): Boolean {
+    return this.all { row ->
+        row.all { predicate.test(it) }
+    }
+}
+
+fun <T> Array<Array<T>>.anyMatch(predicate: Predicate<T>): Boolean {
+    return this.any { row ->
+        row.any { predicate.test(it) }
+    }
+}
+
+fun <T> Array<Array<T>>.get(predicate: Predicate<T>): Set<T> {
+    return this.flatMap { row ->
+        row.filter { predicate.test(it) }
+    }.toSet()
+}
+
+/**
+ * Get the first x items in the deque as string
+ */
+fun ArrayDeque<Char>.takeFirst(count: Int): String {
+    val result = ArrayList<Char>()
+
+    repeat(count) {
+        result.add(this.removeFirst())
+    }
+
+    return result.joinToString("")
+}
 
 fun IntRange.containsAll(other: IntRange): Boolean {
     return this.first <= other.first && this.last >= other.last

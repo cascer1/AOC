@@ -2,7 +2,7 @@ package y2021.day01
 
 import readInput
 
-fun main() {
+private fun main() {
     fun part1(input: List<String>): Int {
         var previous = input[0].toInt()
         var increaseCount = 0

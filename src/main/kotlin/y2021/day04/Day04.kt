@@ -2,12 +2,12 @@ package y2021.day04
 
 import readInput
 
-fun List<BingoNumber>.isComplete(): Boolean = this.all { it.marked }
+private fun List<BingoNumber>.isComplete(): Boolean = this.all { it.marked }
 
-var boards: List<BingoBoard> = emptyList()
-var numbers: List<Int> = emptyList()
+private var boards: List<BingoBoard> = emptyList()
+private var numbers: List<Int> = emptyList()
 
-fun main() {
+private fun main() {
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day04_test")
     check(part1(testInput) == 4512)
@@ -18,7 +18,7 @@ fun main() {
     println(part2(input))
 }
 
-fun parseInput(input: List<String>) {
+private fun parseInput(input: List<String>) {
     numbers = input[0].split(",").map { it.toInt() }
     boards = input
         .drop(1)
@@ -34,7 +34,7 @@ fun parseInput(input: List<String>) {
         }.map { BingoBoard(it) }
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     parseInput(input)
 
     numbers.forEach { number ->
@@ -50,7 +50,7 @@ fun part1(input: List<String>): Int {
     return 0
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     parseInput(input)
 
     val totalBoards = boards.size
@@ -73,9 +73,9 @@ fun part2(input: List<String>): Int {
     return 2
 }
 
-data class BingoNumber(val number: Int, var marked: Boolean = false)
+private data class BingoNumber(val number: Int, var marked: Boolean = false)
 
-class BingoBoard(inputLines: List<List<BingoNumber>>) {
+private class BingoBoard(inputLines: List<List<BingoNumber>>) {
     private val lines: ArrayList<List<BingoNumber>> = ArrayList()
     var complete: Boolean = false
         private set

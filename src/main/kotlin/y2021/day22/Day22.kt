@@ -14,10 +14,10 @@ import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
-var instructions: ArrayList<Instruction> = arrayListOf()
-val partOneLimit = -50..50
+private var instructions: ArrayList<Instruction> = arrayListOf()
+private val partOneLimit = -50..50
 
-fun main() {
+private fun main() {
     instructions = ArrayList(readInput("Day22_test").map { Instruction(it) }.toList())
     check(part1() == 590784L)
     instructions = ArrayList(readInput("Day22_testp2").map { Instruction(it) }.toList())
@@ -36,7 +36,7 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(): Long {
+private fun part1(): Long {
     val reactor = Reactor()
     instructions.mapNotNull { it.limit(partOneLimit, partOneLimit, partOneLimit) }
             .forEach { reactor.execute(it) }
@@ -44,13 +44,13 @@ fun part1(): Long {
     return reactor.count
 }
 
-fun part2(): Long {
+private fun part2(): Long {
     val reactor = Reactor()
     instructions.forEach { reactor.execute(it) }
     return reactor.count
 }
 
-data class Instruction(var x: IntRange, var y: IntRange, var z: IntRange, var mode: InstructionMode) {
+private data class Instruction(var x: IntRange, var y: IntRange, var z: IntRange, var mode: InstructionMode) {
     constructor(input: String) : this(0..0, 0..0, 0..0, InstructionMode.OFF) {
         this.mode = if (input.startsWith("on")) InstructionMode.ON else InstructionMode.OFF
         val tempInput = input.substringAfter(' ').split(',')
@@ -84,9 +84,9 @@ data class Instruction(var x: IntRange, var y: IntRange, var z: IntRange, var mo
     }
 }
 
-enum class InstructionMode { ON, OFF }
+private enum class InstructionMode { ON, OFF }
 
-data class Cube(var x: IntRange, var y: IntRange, var z: IntRange) {
+private data class Cube(var x: IntRange, var y: IntRange, var z: IntRange) {
     val volume: Long
         get() = x.count().toLong() * y.count().toLong() * z.count().toLong()
 
@@ -119,7 +119,7 @@ data class Cube(var x: IntRange, var y: IntRange, var z: IntRange) {
     }
 }
 
-class Reactor {
+private class Reactor {
     private val cubes: HashSet<Cube> = hashSetOf()
 
     val count: Long

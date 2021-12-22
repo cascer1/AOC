@@ -8,7 +8,7 @@ import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
-fun main() {
+private fun main() {
     val testInput = readInput("Day20_test")
     check(part1() == 1)
     check(part2() == 2)
@@ -25,10 +25,10 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(): Int {
+private fun part1(): Int {
     return 1
 }
 
-fun part2(): Int {
+private fun part2(): Int {
     return 2
 }

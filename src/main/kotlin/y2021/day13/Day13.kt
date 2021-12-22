@@ -3,17 +3,17 @@ package y2021.day13
 import readInput
 import kotlin.math.abs
 
-var dots: HashSet<Dot> = HashSet()
-var folds: ArrayList<Fold> = ArrayList()
+private var dots: HashSet<Dot> = HashSet()
+private var folds: ArrayList<Fold> = ArrayList()
 
-fun HashSet<Dot>.getCharAt(x: Int, y: Int): Char {
+private fun HashSet<Dot>.getCharAt(x: Int, y: Int): Char {
     if (this.any { it.x == x && it.y == y }) {
         return '#'
     }
     return ' '
 }
 
-fun parseInput(input: List<String>) {
+private fun parseInput(input: List<String>) {
     dots = input
             .filter { it.matches(Regex("[0-9]+,[0-9]+")) }
             .map {
@@ -31,7 +31,7 @@ fun parseInput(input: List<String>) {
     folds = ArrayList(parsedFolds)
 }
 
-fun main() {
+private fun main() {
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day13_test")
     parseInput(testInput)
@@ -43,7 +43,27 @@ fun main() {
     part2()
 }
 
-fun executeFold(fold: Fold) {
+private fun part1(): Int {
+    executeFold(folds.removeFirst())
+
+    return dots.size
+}
+
+private fun part2() {
+    folds.forEach { executeFold(it) }
+
+    val maxX = dots.maxOf { it.x }
+    val maxY = dots.maxOf { it.y }
+
+    (0 .. maxY).forEach { y ->
+        (0 .. maxX).forEach { x ->
+            print(dots.getCharAt(x, y))
+        }
+        println()
+    }
+}
+
+private fun executeFold(fold: Fold) {
     val foldedDots = if (fold.vertical) {
         dots.filter { it.x > fold.number }.toSet()
     } else {
@@ -65,30 +85,9 @@ fun executeFold(fold: Fold) {
     dots.addAll(foldedDots)
 }
 
+private data class Dot(var x: Int, var y: Int)
 
-fun part1(): Int {
-    executeFold(folds.removeFirst())
-
-    return dots.size
-}
-
-fun part2() {
-    folds.forEach { executeFold(it) }
-
-    val maxX = dots.maxOf { it.x }
-    val maxY = dots.maxOf { it.y }
-
-    (0 .. maxY).forEach { y ->
-        (0 .. maxX).forEach { x ->
-            print(dots.getCharAt(x, y))
-        }
-        println()
-    }
-}
-
-data class Dot(var x: Int, var y: Int)
-
-data class Fold(val axis: String, val number: Int) {
+private data class Fold(val axis: String, val number: Int) {
     val vertical: Boolean
         get() = axis == "x"
 }
