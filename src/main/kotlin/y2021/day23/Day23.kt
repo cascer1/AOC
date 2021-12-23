@@ -12,63 +12,69 @@ import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
-fun main() {
-    val testInput = readInput("Day23_test")
-    check(part1(testInput) == 12521)
-//    check(part2() == 2)
+var bestCost = Long.MAX_VALUE
 
-    val input = readInput("Day23")
+fun main() {
+    check(findBestSteps(readInput("Day23_test_a")) == 12521L)
+    println("part 1 test succeeded!")
+    check(findBestSteps(readInput("Day23_test_b")) == 44169L)
+    println("part 2 test succeeded!")
+
+    var input = readInput("Day23_a")
     val part1Duration: Duration = measureTime {
-        println(part1(input))
+        println(findBestSteps(input))
     }
-//    val part2Duration: Duration = measureTime {
-//        println(part2())
-//    }
+    input = readInput("Day23_b")
+    val part2Duration: Duration = measureTime {
+        println(findBestSteps(input))
+    }
 
     println("Part 1 time: ${part1Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
-//    println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
+    println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Int {
-    val initialState = parseInput(input)
+fun findBestSteps(input: List<String>): Long {
+    bestCost = Long.MAX_VALUE
 
-    val queue = PriorityQueue<State>()
-    queue.add(initialState)
+    // Keep track of the lowest cost of reaching a given state
+    // If we then encounter that state again at a higher cost, we can discard it
+    val alreadyProcessed: HashMap<String, Long> = hashMapOf()
 
-    while(queue.isNotEmpty()) {
-        val thisState = queue.remove()
-        queue.addAll(thisState.potentialStates())
+    val queue = PriorityQueue<State>(compareBy { it.cost })
+    queue.add(parseInput(input))
+
+    while (queue.isNotEmpty()) {
+        val thisState = queue.poll()
+        if (thisState.cost >= bestCost) {
+            break
+        }
+
+        thisState.potentialStates().forEach { newState ->
+            if (newState.complete) {
+                bestCost = min(bestCost, newState.cost)
+            } else {
+                val representation = newState.representation()
+                if (newState.cost < alreadyProcessed.getOrDefault(representation, Long.MAX_VALUE)) {
+                    alreadyProcessed[representation] = newState.cost
+                    queue.offer(newState)
+                }
+            }
+        }
     }
 
-
-
-//    var currentStates: List<State>
-//    var newStates = listOf(initialState)
-//    var iteration = 0
-//    do {
-//        println(iteration++)
-//        println(newStates.size)
-//        currentStates = newStates
-//        newStates = currentStates.flatMap { it.potentialStates() }
-//    } while (newStates.any { !it.complete })
-//
-//    return newStates.minOf { it.score }
-}
-
-fun part2(): Int {
-    return 2
+    return bestCost
 }
 
 fun parseInput(input: List<String>): State {
     val relevantInput = input.drop(2).dropLast(1)
-    val hallwayCells = setOf(
-            Cell(0, 0, null, null),
-            Cell(1, 0, null, null),
-            Cell(3, 0, null, null),
-            Cell(5, 0, null, null),
-            Cell(7, 0, null, null),
-            Cell(9, 0, null, null),
-            Cell(10, 0, null, null)
+    val hallwayCells = listOf(
+        Cell(0, 0, null, null),
+        Cell(1, 0, null, null),
+        Cell(3, 0, null, null),
+        Cell(5, 0, null, null),
+        Cell(7, 0, null, null),
+        Cell(9, 0, null, null),
+        Cell(10, 0, null, null)
     )
 
     val occupants = relevantInput.map { it.split("#").filter { room -> room.isNotBlank() } }
@@ -81,7 +87,7 @@ fun parseInput(input: List<String>): State {
             if (y == 1) {
                 neighbors.addAll(setOf(Pair(x - 1, 0), Pair(x + 1, 0)))
             }
-            Cell(x, y, Amphipod(type), AmphipodType.values()[colIndex])
+            Cell(x, y, Amphipod.valueOf(type), Amphipod.values()[colIndex])
         }
     }
 
@@ -90,268 +96,151 @@ fun parseInput(input: List<String>): State {
     return State(allCells)
 }
 
-data class Amphipod(val type: AmphipodType, var steps: Int = 0) {
-    val totalCost: Int
-        get() = steps * type.movementCost
+/**
+ * Checks whether there is a clear route between the two cells
+ */
+fun isFreePath(xFrom: Int, yFrom: Int, xTo: Int, yTo: Int, cells: List<Cell>): Boolean {
+    val horizontalFree: Boolean
+    val verticalFree: Boolean
 
-    constructor(input: String) : this(AmphipodType.valueOf(input))
+    val verticalSteps = (min(yFrom, yTo)..max(yFrom, yTo))
+    val horizontalSteps = (min(xFrom, xTo)..max(xFrom, xTo))
 
-    fun move(xFrom: Int, yFrom: Int, xTo: Int, yTo: Int) {
-        val distance = abs(xFrom - xTo) + abs(yFrom - yTo)
-        steps += distance
+    if (yFrom != 0) {
+        // start by going up
+        verticalFree = cells.filter { it.x == xFrom }
+            .filterNot { it.y == yFrom } // the cell we're leaving is always occupied
+            .filter { it.y in verticalSteps }
+            .all { it.empty }
+
+        horizontalFree = cells.filter { it.y == 0 }
+            .filter { it.x in (horizontalSteps) }
+            .all { it.empty }
+    } else {
+        // Start by going horizontal
+        horizontalFree = cells.filter { it.y == 0 }
+            .filterNot { it.x == xFrom }
+            .filter { it.x in (horizontalSteps) }
+            .all { it.empty }
+
+        verticalFree = cells.filter { it.x == xTo }
+            .filter { it.y in (verticalSteps) }
+            .all { it.empty }
     }
 
-    fun move(steps: Int) {
-        this.steps += steps
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Amphipod
-
-        return (this.type == other.type && this.steps == other.steps)
-    }
-
-    override fun hashCode(): Int {
-        var result = type.hashCode()
-        result = 31 * result + steps
-        return result
-    }
+    return horizontalFree && verticalFree
 }
 
-data class Cell(val x: Int, val y: Int, var occupant: Amphipod?, var type: AmphipodType?) {
-    fun deepCopy(): Cell {
-        return Cell(x, y, occupant?.copy(), type)
-    }
-
+data class Cell(val x: Int, val y: Int, var occupant: Amphipod?, var type: Amphipod?) {
     val occupied: Boolean
         get() = occupant != null
 
-    val room: Boolean
-        get() = type != null
+    val empty: Boolean
+        get() = occupant == null
 
-    fun possibleMoves(cells: Set<Cell>): List<Pair<Pair<Int, Int>, Pair<Int, Int>>> {
+    fun possibleMoves(cells: List<Cell>): List<Pair<Pair<Int, Int>, Pair<Int, Int>>> {
         if (occupant == null) {
+            // Can't move someone out of an empty room
             return listOf()
         }
 
         if (isComplete(cells)) {
+            // The occupant is right where they must be
             return listOf()
         }
 
-        val freeCells = cells.filterNot { it.occupied }
+        val freeCells = cells.filter { it.empty }
 
-        val potentialTargets = (if (isCompletable(cells)) {
-            // Must move down if in own completable room
-            listOf(freeCells.filter { it.x == x && it.y > y }.maxByOrNull { it.y }!!)
-        } else {
-            if (y == 0) {
-                // Must move down from hallway
-                listOfNotNull(freeCells.filter { it.y > 0 }.filter { it.type!! == occupant!!.type }.maxByOrNull { it.y })
-            } else {
-                // Must move up from room
-                freeCells.filter { it.y == 0 }
-            }
-        }).filter { isFreePath(x, y, it.x, it.y, cells) }
-                .map { Pair(Pair(x, y), Pair(it.x, it.y)) }
+        val potentialTargets = (
+                if (y == 0) {
+                    // Must move out of hallway
+                    val targetX = occupant!!.ordinal * 2 + 2
+                    val roomCells = cells.filter { it.x == targetX }
+                    val roomAvailable = roomCells.all { it.empty || it.occupant!! == it.type!! }
+
+                    if (roomAvailable) {
+                        listOfNotNull(roomCells.filter { it.empty }.maxByOrNull { it.y })
+                    } else {
+                        listOf()
+                    }
+                } else {
+                    // Must move up from room
+                    freeCells.filter { it.y == 0 }
+                }
+                ).filter { isFreePath(x, y, it.x, it.y, cells) }
+            .map { Pair(Pair(x, y), Pair(it.x, it.y)) }
 
         return potentialTargets
     }
 
-    fun isFreePath(xFrom: Int, yFrom: Int, xTo: Int, yTo: Int, cells: Set<Cell>): Boolean {
-        var horizontalFree = false
-        var verticalFree = false
-
-        val verticalSteps = (min(yFrom, yTo) .. max(yFrom, yTo))
-        val horizontalSteps = (min(xFrom, xTo) .. max(xFrom, xTo))
-
-        if (yFrom != 0) {
-            // start by going up
-            verticalFree = cells.filter { it.x == xFrom }
-                    .filterNot { it.y == yFrom } // the cell we're leaving is always occupied
-                    .filter { it.y in verticalSteps }
-                    .none { it.occupied }
-
-            horizontalFree = cells.filter { it.y == 0 }
-                    .filter { it.x in (horizontalSteps) }
-                    .none { it.occupied }
-        } else {
-            // Start by going horizontal
-            horizontalFree = cells.filter { it.y == 0 }
-                    .filterNot { it.x == xFrom }
-                    .filter { it.x in (horizontalSteps) }
-                    .none { it.occupied }
-
-            verticalFree = cells.filter { it.x == xTo }
-                    .filter { it.y in (verticalSteps) }
-                    .none { it.occupied }
-        }
-
-        return horizontalFree && verticalFree
-    }
-
-    fun isComplete(cells: Set<Cell>): Boolean {
+    /**
+     * Returns true if this cell and all those below it are of the correct type
+     */
+    private fun isComplete(cells: List<Cell>): Boolean {
         if (type == null || occupant == null) {
             return false
         }
 
-        if (occupant!!.type != type) {
+        if (occupant!! != type) {
             return false
         }
 
-        val lowerNeighbor = cells.firstOrNull { it.x == x && it.y == y + 1 }
-
-        if (lowerNeighbor != null) {
-            return lowerNeighbor.isComplete(cells)
-        }
-
-        return true
+        // if there is a lower neighbor, return its completion status. Else, return true
+        return cells.firstOrNull { it.x == x && it.y == y + 1 }?.isComplete(cells) ?: true
     }
-
-    fun isCompletable(cells: Set<Cell>): Boolean {
-        if (type == null || occupant == null) {
-            return false
-        }
-
-        if (occupant!!.type != type) {
-            return false
-        }
-
-        val lowerNeighbors = cells.filter { it.x == x && it.y > y }
-
-        return lowerNeighbors.all { !it.occupied || it.occupant!!.type == it.type!! }
-    }
-
-    fun canEnter(type: AmphipodType, cells: Set<Cell>): Boolean {
-        // Hallways can accomodate all types
-        if (this.type == null) {
-            return true
-        }
-
-        // Rooms may only be entered if they contain only the correct type
-        if (!roomFillable(cells)) {
-            return false
-        }
-
-        return type == this.type!!
-    }
-
-    // Room can be filled if all its cells are either empty or occupied by the correct type
-    private fun roomFillable(cells: Set<Cell>): Boolean {
-        return cells.filter { it.x == x && it.y > 0 }
-                .none { it.type!! != it.occupant?.type }
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Cell
-
-        if (x != other.x) return false
-        if (y != other.y) return false
-        if (occupant != other.occupant) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = x
-        result = 31 * result + y
-        result = 31 * result + (occupant?.hashCode() ?: 0)
-        return result
-    }
-
-
 }
 
-data class State(val cells: Set<Cell>): Comparable<State> {
+data class State(val cells: List<Cell>, var cost: Long = 0L) : Comparable<State> {
+    private var representation: String? = null
+
     override fun compareTo(other: State): Int {
-        return this.score.compareTo(other.score)
+        return this.cost.compareTo(other.cost)
     }
 
-    fun deepCopy(): State {
-        return State(cells.map { it.deepCopy() }.toSet())
+    private fun deepCopy(): State {
+        return State(cells.map { it.copy() }, cost)
     }
 
     val complete: Boolean
         get() {
             return cells.filter { it.type != null }
-                    .all { it.occupied && it.occupant!!.type == it.type }
+                .all { it.occupied && it.occupant!! == it.type }
         }
 
-    val score: Int
-        get() {
-            return cells.filter { it.occupied }.sumOf { it.occupant!!.totalCost }
-        }
-
-    fun move(from: Pair<Int, Int>, to: Pair<Int, Int>): State {
-        val occupant = getOccupant(from.first, from.second) ?: return this
+    private fun move(from: Pair<Int, Int>, to: Pair<Int, Int>): State {
+        val occupant = getOccupant(from.first, from.second)
         setOccupant(to.first, to.second, occupant)
         setOccupant(from.first, from.second, null)
-        occupant.move(from.first, from.second, to.first, to.second)
+        cost += occupant.move(from.first, from.second, to.first, to.second)
         return this
     }
 
-    fun setOccupant(x: Int, y: Int, occupant: Amphipod?) {
+    private fun setOccupant(x: Int, y: Int, occupant: Amphipod?) {
         cells.first { it.x == x && it.y == y }.occupant = occupant
     }
 
-    fun getOccupant(x: Int, y: Int): Amphipod? {
-        return cells.first { it.x == x && it.y == y }.occupant
-    }
-
-    fun bestScore(): Int {
-        if (complete) {
-            return score
-        }
-
-        return potentialStates().minOf { it.bestScore() }
+    private fun getOccupant(x: Int, y: Int): Amphipod {
+        return cells.first { it.x == x && it.y == y }.occupant!!
     }
 
     fun potentialStates(): List<State> {
-        if (complete) {
-            return listOf(this)
-        }
-
-        val possibleMoves = cells.flatMap { it.possibleMoves(cells) }
-
-        if (possibleMoves.isEmpty()) {
-            return listOf(this)
-        }
-
-        val newStates = possibleMoves.map {
-            val from = it.first
-            val to = it.second
-            val newState = this.deepCopy()
-            newState.move(from, to)
-        }.toList()
-
-        if (newStates.any { it.complete }) {
-            return newStates.filter { it.complete }.toList()
-        }
-
-        return newStates
+        return cells.flatMap { it.possibleMoves(cells) }
+            .map {
+                val newState = this.deepCopy()
+                newState.move(it.first, it.second)
+            }
     }
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as State
-
-        if (cells != other.cells) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return cells.hashCode()
+    fun representation(): String {
+        return representation ?: cells.map { it.occupant?.name ?: "." }.reduce { acc, s -> acc + s }
     }
 }
 
-enum class AmphipodType(val movementCost: Int) {
-    A(1), B(10), C(100), D(1000)
+enum class Amphipod(private val movementCost: Int) {
+    A(1), B(10), C(100), D(1000);
+
+    fun move(xFrom: Int, yFrom: Int, xTo: Int, yTo: Int): Int {
+        val distance = abs(xFrom - xTo) + abs(yFrom - yTo)
+        return distance * movementCost
+    }
 }
