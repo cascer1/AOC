@@ -12,7 +12,9 @@ fun main() {
     val testInput = readInput("Day20_test")
     parseInput(testInput)
     check(part1() == 1)
+    println("Part 1 check successful!")
     check(part2() == 2)
+    println("Part 2 check successful!")
 
     val input = readInput("Day20")
     parseInput(input)
