@@ -49,12 +49,12 @@ private fun Array<Array<Boolean>>.getSurroundingIndex(x: Int, y: Int, unknown: B
 }
 
 private fun main() {
-    val testInput = readInput("Day20_test")
+    val testInput = readInput("2021/Day20_test")
     parseInput(testInput)
     check(part1() == 35)
     check(part2() == 3351)
 
-    val input = readInput("Day20")
+    val input = readInput("2021/Day20")
     parseInput(input)
     val part1Duration: Duration = measureTime {
         println(part1())

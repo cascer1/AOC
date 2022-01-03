@@ -20,12 +20,12 @@ private fun Set<Distance>.matchCount(other: Set<Distance>): Int {
 }
 
 private fun main() {
-    val testInput = readInput("Day19_test")
+    val testInput = readInput("2021/Day19_test")
     parseInput(testInput)
     check(part1() == 79)
     check(part2() == 3621)
 
-    val input = readInput("Day19")
+    val input = readInput("2021/Day19")
     parseInput(input)
     val part1Duration: Duration = measureTime {
         println(part1())

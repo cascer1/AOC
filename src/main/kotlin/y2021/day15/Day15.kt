@@ -40,12 +40,12 @@ private fun parseInput(input: List<String>) {
 }
 
 private fun main() {
-    val testInput = readInput("Day15_test")
+    val testInput = readInput("2021/Day15_test")
     parseInput(testInput)
     check(part1() == 40)
     check(part2() == 315)
 
-    val input = readInput("Day15")
+    val input = readInput("2021/Day15")
     parseInput(input)
 
     val part1Duration: Duration = measureTime {

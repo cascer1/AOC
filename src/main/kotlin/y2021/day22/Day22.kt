@@ -18,12 +18,12 @@ private var instructions: ArrayList<Instruction> = arrayListOf()
 private val partOneLimit = -50..50
 
 private fun main() {
-    instructions = ArrayList(readInput("Day22_test").map { Instruction(it) }.toList())
+    instructions = ArrayList(readInput("2021/Day22_test").map { Instruction(it) }.toList())
     check(part1() == 590784L)
-    instructions = ArrayList(readInput("Day22_testp2").map { Instruction(it) }.toList())
+    instructions = ArrayList(readInput("2021/Day22_testp2").map { Instruction(it) }.toList())
     check(part2() == 2758514936282235L)
 
-    val input = readInput("Day22")
+    val input = readInput("2021/Day22")
     instructions = ArrayList(input.map { Instruction(it) }.toList())
     val part1Duration: Duration = measureTime {
         println(part1())

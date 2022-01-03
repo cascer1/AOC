@@ -7,12 +7,12 @@ private var heightMap: Array<Array<Point>> = emptyArray()
 
 private fun main() {
     // test if implementation meets criteria from the description, like:
-    val testInput = readInput("Day09_test")
+    val testInput = readInput("2021/Day09_test")
     heightMap = parseInput(testInput)
     check(part1() == 15)
     check(part2() == 1134)
 
-    val input = readInput("Day09")
+    val input = readInput("2021/Day09")
     heightMap = parseInput(input)
     println(part1())
     println(part2())

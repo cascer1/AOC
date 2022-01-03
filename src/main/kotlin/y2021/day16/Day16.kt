@@ -24,7 +24,7 @@ private fun main() {
     check(part2("9C005AC2F8F0") == 0L)
     check(part2("9C0141080250320F1802104A08") == 1L)
 
-    val input = readInput("Day16")
+    val input = readInput("2021/Day16")
 
     val part1Duration: Duration = measureTime {
         println(part1(input[0]))

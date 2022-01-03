@@ -1,12 +1,16 @@
 import java.io.File
+import java.math.BigInteger
+import java.security.MessageDigest
 import java.util.function.Predicate
 import kotlin.math.max
 import kotlin.math.min
 
+fun String.md5(): String = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray())).toString(16).padStart(32, '0')
+
 /**
  * Reads lines from the given input txt file.
  */
-fun readInput(name: String) = File("inputs", "2021/$name.txt").readLines()
+fun readInput(name: String) = File("inputs", "$name.txt").readLines()
 
 /**
  * Get the item at index[x][y], or return the unknonw value if none is found
@@ -86,3 +90,6 @@ fun IntRange.split(other: IntRange): List<IntRange> {
             right(other)
     ).filterNot { it.isEmpty() }
 }
+
+data class TwoDimensionalCoordinates(var x: Int, var y: Int)
+data class ThreeDimensionalCoordinates(var x: Int, var y: Int, var z: Int)

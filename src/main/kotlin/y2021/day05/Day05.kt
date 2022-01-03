@@ -13,11 +13,11 @@ private var maxY = 0
 
 private fun main() {
     // test if implementation meets criteria from the description, like:
-    val testInput = readInput("Day05_test")
+    val testInput = readInput("2021/Day05_test")
     check(part1(testInput) == 5)
     check(part2(testInput) == 12)
 
-    val input = readInput("Day05")
+    val input = readInput("2021/Day05")
     println(part1(input))
     println(part2(input))
 }

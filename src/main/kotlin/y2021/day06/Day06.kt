@@ -4,11 +4,11 @@ import readInput
 
 private fun main() {
     // test if implementation meets criteria from the description, like:
-    val testInput = readInput("Day06_test")
+    val testInput = readInput("2021/Day06_test")
     check(simulateFishes(testInput, 80) == 5934L)
     check(simulateFishes(testInput, 256) == 26984457539)
 
-    val input = readInput("Day06")
+    val input = readInput("2021/Day06")
     println(simulateFishes(input, 80))
     println(simulateFishes(input, 256))
 }

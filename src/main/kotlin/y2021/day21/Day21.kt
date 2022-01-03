@@ -15,12 +15,12 @@ private var lastRoll = 0
 private var rollCount = 0
 
 private fun main() {
-    val testInput = readInput("Day21_test")
+    val testInput = readInput("2021/Day21_test")
     parseInput(testInput)
     check(part1() == 739785)
     check(part2() == 444356092776315L)
 
-    val input = readInput("Day21")
+    val input = readInput("2021/Day21")
     parseInput(input)
     val part1Duration: Duration = measureTime {
         println(part1())

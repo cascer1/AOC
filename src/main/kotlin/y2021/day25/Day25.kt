@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalTime::class)
 
-package y2021
+package y2021.day25
 
 import readInput
 import kotlin.time.Duration
@@ -13,11 +13,11 @@ var xMax = 0
 var yMax = 0
 
 fun main() {
-    val testInput = readInput("Day25_test")
+    val testInput = readInput("2021/Day25_test")
     check(part1(testInput) == 58)
     println("Part 1 check successful!")
 
-    val input = readInput("Day25")
+    val input = readInput("2021/Day25")
     val part1Duration: Duration = measureTime {
         println(part1(input))
     }

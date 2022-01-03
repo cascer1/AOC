@@ -8,12 +8,12 @@ private var state: HashMap<String, Long> = HashMap()
 private var startCharacter: Char = 'a'
 
 private fun main() {
-    val testInput = readInput("Day14_test")
+    val testInput = readInput("2021/Day14_test")
     parseInput(testInput)
     check(doTheThing(10) == 1588L)
     check(doTheThing(30) == 2188189693529L)
 
-    val input = readInput("Day14")
+    val input = readInput("2021/Day14")
     parseInput(input)
     println(doTheThing(10))
     println(doTheThing(30))

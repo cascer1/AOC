@@ -33,11 +33,11 @@ private fun parseInput(input: List<String>) {
 
 private fun main() {
     // test if implementation meets criteria from the description, like:
-    val testInput = readInput("Day13_test")
+    val testInput = readInput("2021/Day13_test")
     parseInput(testInput)
     check(part1() == 17)
 
-    val input = readInput("Day13")
+    val input = readInput("2021/Day13")
     parseInput(input)
     println(part1())
     part2()

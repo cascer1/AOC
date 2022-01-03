@@ -15,16 +15,16 @@ import kotlin.time.measureTime
 var bestCost = Long.MAX_VALUE
 
 fun main() {
-    check(findBestSteps(readInput("Day23_test_a")) == 12521L)
+    check(findBestSteps(readInput("2021/Day23_test_a")) == 12521L)
     println("part 1 test succeeded!")
-    check(findBestSteps(readInput("Day23_test_b")) == 44169L)
+    check(findBestSteps(readInput("2021/Day23_test_b")) == 44169L)
     println("part 2 test succeeded!")
 
-    var input = readInput("Day23_a")
+    var input = readInput("2021/Day23_a")
     val part1Duration: Duration = measureTime {
         println(findBestSteps(input))
     }
-    input = readInput("Day23_b")
+    input = readInput("2021/Day23_b")
     val part2Duration: Duration = measureTime {
         println(findBestSteps(input))
     }

@@ -5,11 +5,11 @@ import kotlin.math.abs
 
 private fun main() {
     // test if implementation meets criteria from the description, like:
-    val testInput = readInput("Day07_test")
+    val testInput = readInput("2021/Day07_test")
     check(part1(testInput) == 37L)
     check(part2(testInput) == 168L)
 
-    val input = readInput("Day07")
+    val input = readInput("2021/Day07")
     println(part1(input))
     println(part2(input))
 }

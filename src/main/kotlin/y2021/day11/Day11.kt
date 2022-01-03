@@ -39,12 +39,12 @@ private fun Array<Array<Octopus>>.resetFlashStates() {
 
 private fun main() {
     // test if implementation meets criteria from the description, like:
-    val testInput = readInput("Day11_test")
+    val testInput = readInput("2021/Day11_test")
     parseInput(testInput)
     check(part1() == 1656)
     check(part2() == 195)
 
-    val input = readInput("Day11")
+    val input = readInput("2021/Day11")
     parseInput(input)
     println(part1())
     println(part2())
