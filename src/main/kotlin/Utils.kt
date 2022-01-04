@@ -7,6 +7,17 @@ import kotlin.math.min
 
 fun String.md5(): String = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray())).toString(16).padStart(32, '0')
 
+fun Byte.toggle(): Byte {
+    if (this == 0x0.toByte()) {
+        return 0x1.toByte()
+    }
+    return 0x0.toByte()
+}
+
+fun Int.toggle(): Int {
+    return if (this == 0) 1 else 0
+}
+
 /**
  * Reads lines from the given input txt file.
  */
@@ -23,8 +34,16 @@ fun <T> Array<Array<T>>.getAt(x: Int, y: Int): T? {
     return this.getOrNull(y)?.getOrNull(x)
 }
 
+fun <T> Array<Array<T>>.getAtOrDefault(x: Int, y: Int, default: T): T {
+    return this.getAt(x, y) ?: default
+}
+
 fun <T> HashMap<Pair<Int, Int>, T>.getAt(x: Int, y: Int): T? {
     return this[Pair(x, y)]
+}
+
+fun <T> HashMap<Pair<Int, Int>, T>.getAtOrDefault(x: Int, y: Int, default: T): T {
+    return this.getAt(x, y) ?: default
 }
 
 fun <K> HashMap<K, Long>.addCount(sequence: K, amount: Long) {
@@ -91,5 +110,40 @@ fun IntRange.split(other: IntRange): List<IntRange> {
     ).filterNot { it.isEmpty() }
 }
 
-data class TwoDimensionalCoordinates(var x: Int, var y: Int)
-data class ThreeDimensionalCoordinates(var x: Int, var y: Int, var z: Int)
+open class TwoDimensionalCoordinates(var x: Int, var y: Int) {
+    companion object {
+        @JvmStatic
+        fun fromString(input: String): TwoDimensionalCoordinates {
+            val (x, y) = input.split(',').map { it.toInt() }
+            return TwoDimensionalCoordinates(x, y)
+        }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as TwoDimensionalCoordinates
+
+        if (x != other.x) return false
+        if (y != other.y) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = x
+        result = 31 * result + y
+        return result
+    }
+}
+
+open class ThreeDimensionalCoordinates(var x: Int, var y: Int, var z: Int) {
+    companion object {
+        @JvmStatic
+        fun fromString(input: String): ThreeDimensionalCoordinates {
+            val (x, y, z) = input.split(',').map { it.toInt() }
+            return ThreeDimensionalCoordinates(x, y, z)
+        }
+    }
+}
