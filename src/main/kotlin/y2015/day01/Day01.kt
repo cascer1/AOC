@@ -9,7 +9,7 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
 fun main() {
-    val input = readInput("2015/Day01")
+    val input = readInput("2015/Day01.txt")
     val part1Duration: Duration = measureTime {
         println(part1(input))
    }

@@ -42,11 +42,11 @@ private fun main() {
     }
 
     // test if implementation meets criteria from the description, like:
-    val testInput = readInput("2021/Day01_test")
+    val testInput = readInput("2021/Day01_test.txt")
     check(part1(testInput) == 7)
     check(part2(testInput) == 5)
 
-    val input = readInput("2021/Day01")
+    val input = readInput("2021/Day01.txt")
     println(part1(input))
     println(part2(input))
 }
