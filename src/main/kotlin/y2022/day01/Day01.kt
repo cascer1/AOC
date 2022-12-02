@@ -1,7 +1,6 @@
-package y2022
+package y2022.day01
 
 import readInput
-import kotlin.math.max
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
