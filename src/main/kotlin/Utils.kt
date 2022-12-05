@@ -82,6 +82,7 @@ fun ArrayDeque<Char>.takeFirst(count: Int): String {
     return result.joinToString("")
 }
 
+
 fun IntRange.containsAll(other: IntRange): Boolean {
     return this.first <= other.first && this.last >= other.last
 }
@@ -146,4 +147,16 @@ open class ThreeDimensionalCoordinates(var x: Int, var y: Int, var z: Int) {
             return ThreeDimensionalCoordinates(x, y, z)
         }
     }
+}
+
+fun <T> ArrayList<ArrayDeque<T>>.insertInDeque(index: Int, value: T) {
+    if (this.isEmpty()) {
+        this.add(ArrayDeque())
+    }
+    if (this.lastIndex < index) {
+        (this.lastIndex .. index).forEach {
+            this.add(ArrayDeque())
+        }
+    }
+    this[index].addLast(value)
 }
