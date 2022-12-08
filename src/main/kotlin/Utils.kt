@@ -38,6 +38,16 @@ fun <T> Array<Array<T>>.getAtOrDefault(x: Int, y: Int, default: T): T {
     return this.getAt(x, y) ?: default
 }
 
+inline fun <reified T> Array<Array<T>>.getColumn(x: Int): Array<T> {
+    val returned = arrayListOf<T>()
+
+    (0 .. this.lastIndex).forEach { rowIndex ->
+        returned.add(this.getAt(x, rowIndex)!!)
+    }
+
+    return returned.toTypedArray()
+}
+
 fun <T> HashMap<Pair<Int, Int>, T>.getAt(x: Int, y: Int): T? {
     return this[Pair(x, y)]
 }
