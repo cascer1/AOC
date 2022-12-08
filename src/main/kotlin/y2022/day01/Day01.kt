@@ -36,12 +36,12 @@ fun part2(input: List<String>): Int {
 }
 
 fun getTopX(input: List<String>, count: Int): Int {
-    var calorieCounts = ArrayList<Int>()
+    val calorieCounts = ArrayList<Int>()
 
     var thisElf = 0
 
     input.forEach {
-        if (it.isNullOrEmpty()) {
+        if (it.isEmpty()) {
             calorieCounts.add(thisElf)
             thisElf = 0
         } else {
@@ -52,8 +52,4 @@ fun getTopX(input: List<String>, count: Int): Int {
     calorieCounts.add(thisElf)
 
     return calorieCounts.sortedDescending().take(count).sum()
-}
-
-fun parseInput(input: List<String>) {
-    println("parsing")
 }

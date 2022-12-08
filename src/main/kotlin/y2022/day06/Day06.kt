@@ -36,5 +36,5 @@ fun findMarker(input: String, length: Int): Int {
         }
     }
 
-    return 0
+    throw IllegalStateException("Impossible state")
 }
