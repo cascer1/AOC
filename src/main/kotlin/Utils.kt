@@ -24,7 +24,7 @@ fun Int.toggle(): Int {
 fun readInput(name: String) = File("inputs", "$name.txt").readLines()
 
 /**
- * Get the item at index[x][y], or return the unknonw value if none is found
+ * Get the item at index[x][y], or return the unknown value if none is found
  */
 fun <T> Array<Array<T>>.getAt(x: Int, y: Int, unknown: T): T {
     return this.getAt(x, y) ?: unknown
@@ -48,8 +48,17 @@ inline fun <reified T> Array<Array<T>>.getColumn(x: Int): Array<T> {
     return returned.toTypedArray()
 }
 
-fun <T> HashMap<Pair<Int, Int>, T>.getAt(x: Int, y: Int): T? {
+fun <T> Map<Pair<Int, Int>, T>.getAt(x: Int, y: Int): T? {
     return this[Pair(x, y)]
+}
+
+fun <T> Map<Pair<Int, Int>, T>.surroundingMatching(x: Int, y: Int, filter: (T) -> Boolean): ArrayList<T> {
+    return ArrayList(setOfNotNull(
+        this.getAt(x, y - 1), // above
+        this.getAt(x - 1, y), // left
+        this.getAt(x + 1, y), // right
+        this.getAt(x, y + 1)  // below
+    ).filter(filter))
 }
 
 fun <T> HashMap<Pair<Int, Int>, T>.getAtOrDefault(x: Int, y: Int, default: T): T {
