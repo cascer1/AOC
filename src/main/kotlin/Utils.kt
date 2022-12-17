@@ -2,6 +2,7 @@ import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.function.Predicate
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
@@ -178,4 +179,10 @@ fun <T> ArrayList<ArrayDeque<T>>.insertInDeque(index: Int, value: T) {
         }
     }
     this[index].addLast(value)
+}
+
+fun Pair<Int, Int>.manhattanDistance(other: Pair<Int, Int>): Int {
+    val xDistance = abs(this.first - other.first)
+    val yDistance = abs(this.second - other.second)
+    return xDistance + yDistance
 }
