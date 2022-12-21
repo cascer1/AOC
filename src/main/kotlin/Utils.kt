@@ -6,7 +6,8 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-fun String.md5(): String = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray())).toString(16).padStart(32, '0')
+fun String.md5(): String =
+    BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray())).toString(16).padStart(32, '0')
 
 fun Byte.toggle(): Byte {
     if (this == 0x0.toByte()) {
@@ -42,7 +43,7 @@ fun <T> Array<Array<T>>.getAtOrDefault(x: Int, y: Int, default: T): T {
 inline fun <reified T> Array<Array<T>>.getColumn(x: Int): Array<T> {
     val returned = arrayListOf<T>()
 
-    (0 .. this.lastIndex).forEach { rowIndex ->
+    (0..this.lastIndex).forEach { rowIndex ->
         returned.add(this.getAt(x, rowIndex)!!)
     }
 
@@ -53,13 +54,23 @@ fun <T> Map<Pair<Int, Int>, T>.getAt(x: Int, y: Int): T? {
     return this[Pair(x, y)]
 }
 
+fun <T, R> Map<Pair<R, R>, T>.allEmpty(coordinates: Set<Pair<R, R>>): Boolean {
+    return coordinates.none { this.contains(it) }
+}
+
+fun <T> Set<Pair<T, T>>.allEmpty(coordinates: Set<Pair<T, T>>): Boolean {
+    return coordinates.none { this.contains(it) }
+}
+
 fun <T> Map<Pair<Int, Int>, T>.surroundingMatching(x: Int, y: Int, filter: (T) -> Boolean): ArrayList<T> {
-    return ArrayList(setOfNotNull(
-        this.getAt(x, y - 1), // above
-        this.getAt(x - 1, y), // left
-        this.getAt(x + 1, y), // right
-        this.getAt(x, y + 1)  // below
-    ).filter(filter))
+    return ArrayList(
+        setOfNotNull(
+            this.getAt(x, y - 1), // above
+            this.getAt(x - 1, y), // left
+            this.getAt(x + 1, y), // right
+            this.getAt(x, y + 1)  // below
+        ).filter(filter)
+    )
 }
 
 fun <T> HashMap<Pair<Int, Int>, T>.getAtOrDefault(x: Int, y: Int, default: T): T {
@@ -125,9 +136,9 @@ fun IntRange.right(other: IntRange): IntRange {
 
 fun IntRange.split(other: IntRange): List<IntRange> {
     return listOf(
-            left(other),
-            center(other),
-            right(other)
+        left(other),
+        center(other),
+        right(other)
     ).filterNot { it.isEmpty() }
 }
 
@@ -174,7 +185,7 @@ fun <T> ArrayList<ArrayDeque<T>>.insertInDeque(index: Int, value: T) {
         this.add(ArrayDeque())
     }
     if (this.lastIndex < index) {
-        (this.lastIndex .. index).forEach {
+        (this.lastIndex..index).forEach {
             this.add(ArrayDeque())
         }
     }
