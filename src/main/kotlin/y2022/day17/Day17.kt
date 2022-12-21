@@ -7,6 +7,12 @@ import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
+/** TODO: Part 2
+ *
+ * This solution will probably work for part 2 if given enough time and memory.
+ * Instead, I should attempt to figure out if there is a repeating pattern to speed up calculations.
+ */
+
 val rocks = arrayOf(
     // # # # #
     setOf(Pair(0, 0), Pair(1, 0), Pair(2, 0), Pair(3, 0)),
