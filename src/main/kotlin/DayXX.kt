@@ -8,9 +8,9 @@ import kotlin.time.measureTime
 fun main() {
     val inputFile = "2000/Day"
     val testInput = readInput("${inputFile}_test")
-    check(part1(testInput) == 58)
+    require(part1(testInput) == 58) { "Part 1 check failed" }
     println("Part 1 check successful!")
-    check(part2(testInput) == 58)
+    require(part2(testInput) == 58) { "Part 2 check failed" }
     println("Part 2 check successful!")
 
     val input = readInput(inputFile)
