@@ -190,6 +190,10 @@ fun part2(input: List<String>, segmentSize: Int): Int {
     val map = parseMap(input)
     val instructions = input.last()
 
+
+    // probably just manually define transformations for walking off the different edges
+    // like if (x in (a .. b) and y in (c .. d)) -> transform x + a & y + b, set direction to c
+
     return 2
 }
 
