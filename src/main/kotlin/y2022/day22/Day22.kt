@@ -64,9 +64,7 @@ fun part1(input: List<String>): Int {
         position = move(position, map, directions[directionIndex % 4], instruction.toInt())
     }
 
-
-    val result = 1000 * position.second + 4 * position.first + directionIndex % 4
-    return result
+    return 1000 * position.second + 4 * position.first + directionIndex % 4
 }
 
 fun move(position: Coordinate, map: CoordinateMap, direction: Char, distance: Int): Coordinate {
