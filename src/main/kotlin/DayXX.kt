@@ -6,17 +6,16 @@ import kotlin.time.measureTime
 
 @OptIn(ExperimentalTime::class)
 fun main() {
-    val inputFile = "2000/Day"
+    val inputFile = "2023/Day"
     val testInput = readInput("${inputFile}_test")
     require(part1(testInput) == 58) { "Part 1 check failed" }
-    println("Part 1 check successful!")
-    require(part2(testInput) == 58) { "Part 2 check failed" }
-    println("Part 2 check successful!")
 
     val input = readInput(inputFile)
     val part1Duration: Duration = measureTime {
         println(part1(input))
     }
+
+    require(part2(testInput) == 58) { "Part 2 check failed" }
     val part2Duration: Duration = measureTime {
         println(part2(input))
     }
