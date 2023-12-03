@@ -54,6 +54,10 @@ fun <T> Map<Pair<Int, Int>, T>.getAt(x: Int, y: Int): T? {
     return this[Pair(x, y)]
 }
 
+fun <T> Map<Pair<Int, Int>, T>.getAtOrDefault(x: Int, y: Int, default: T): T {
+    return this.getAt(x, y) ?: default
+}
+
 fun <T, R> Map<Pair<R, R>, T>.allEmpty(coordinates: Set<Pair<R, R>>): Boolean {
     return coordinates.none { this.contains(it) }
 }
