@@ -101,12 +101,4 @@ class DigitPosition(val digit: Digit, val position: Int) {
 
         return true
     }
-
-    override fun hashCode(): Int {
-        return position
-    }
-
-    override fun toString(): String {
-        return "DigitPosition(word=${digit.word}, position=$position)"
-    }
 }
