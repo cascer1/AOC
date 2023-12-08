@@ -201,3 +201,5 @@ fun Pair<Int, Int>.manhattanDistance(other: Pair<Int, Int>): Int {
     val yDistance = abs(this.second - other.second)
     return xDistance + yDistance
 }
+
+fun <T> Sequence<T>.repeat() = sequence { while (true) yieldAll(this@repeat) }
