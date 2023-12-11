@@ -395,7 +395,3 @@ class Pipe(val x: Int, val y: Int, val shape: Char) {
         return returned
     }
 }
-
-enum class Direction {
-    NORTH, SOUTH, EAST, WEST
-}
