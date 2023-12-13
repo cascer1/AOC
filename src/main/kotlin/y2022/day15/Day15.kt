@@ -28,7 +28,7 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>, y: Int): Int {
+private fun part1(input: List<String>, y: Int): Int {
     val relevantSensors = parseInput(input).filter { it.isNearY(y) }.sortedBy { it.x }
     val beaconCoordinates = relevantSensors.map { it.beacon }
 
@@ -51,7 +51,7 @@ fun part1(input: List<String>, y: Int): Int {
     return coveredCoordinates.size
 }
 
-fun part2(input: List<String>, xRange: IntRange, yRange: IntRange): Long {
+private fun part2(input: List<String>, xRange: IntRange, yRange: IntRange): Long {
     val relevantSensors = parseInput(input).filter { it.isWithin(xRange, yRange) }
     val beaconCoordinates = relevantSensors.map { it.beacon }
 

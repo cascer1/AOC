@@ -28,7 +28,7 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     val valves = parseInput(input)
 
     val distances: HashMap<String, HashMap<String, Int>> = HashMap()
@@ -62,7 +62,7 @@ fun part1(input: List<String>): Int {
     return bestResult
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     parseInput(input)
 
     return 2

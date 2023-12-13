@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalTime::class)
-
 package y2015.day05
 
 import readInput
@@ -9,6 +7,7 @@ import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
+@OptIn(ExperimentalTime::class)
 fun main() {
     val inputFile = "2015/Day05"
     val input = readInput(inputFile)
@@ -23,7 +22,7 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     val vowels = setOf('a', 'e', 'i', 'o', 'u')
     val forbiddenPairs = setOf("ab", "cd", "pq", "xy")
     val doubleLetters = Pattern.compile(".*(.)\\1.*").asMatchPredicate()
@@ -34,7 +33,7 @@ fun part1(input: List<String>): Int {
             .count()
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     val pattern1 = Pattern.compile(".*(..).*\\1.*").asMatchPredicate()
     val pattern2 = Pattern.compile(".*(.).\\1.*").asMatchPredicate()
     return input.asSequence()

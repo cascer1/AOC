@@ -57,7 +57,7 @@ fun fillScores() {
     losingMoves["C"] = "Y"
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     var score = 0
 
     input.forEach { round ->
@@ -68,7 +68,7 @@ fun part1(input: List<String>): Int {
     return score
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     var score = 0
 
     input.forEach { round ->

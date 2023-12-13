@@ -23,13 +23,13 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     parseInput(input)
 
     return 1
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     parseInput(input)
 
     return 2

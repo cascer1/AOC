@@ -29,7 +29,7 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     rucksacks = parseInput(input)
 
     return rucksacks
@@ -37,7 +37,7 @@ fun part1(input: List<String>): Int {
         .sumOf { getCharValue(it) }
 }
 
-fun part2(): Int {
+private fun part2(): Int {
     val groups = rucksacks.windowed(3, 3)
 
     return groups.map { group ->

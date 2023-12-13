@@ -45,7 +45,7 @@ fun simulateMonkeys(input: List<String>, rounds: Int, worryDivisor: Long): Long 
     return sortedMonkeys[0] * sortedMonkeys[1]
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     parseInput(input)
 
     return 2

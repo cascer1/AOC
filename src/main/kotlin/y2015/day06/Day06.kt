@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalTime::class)
-
 package y2015.day06
 
 import TwoDimensionalCoordinates
@@ -12,6 +10,7 @@ import kotlin.time.measureTime
 
 var lights: Array<Array<Int>> = emptyArray()
 
+@OptIn(ExperimentalTime::class)
 fun main() {
     val inputFile = "2015/Day06"
     val input = readInput(inputFile)
@@ -26,14 +25,14 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     lights = Array(1000) { Array(1000) { 0 } }
     val instructions = parseInput(input)
     instructions.forEach { executeInstruction(it) }
     return lights.sumOf { it.count { brightness -> brightness > 0 } }
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     lights = Array(1000) { Array(1000) { 0 } }
     val instructions = parseInput(input)
     instructions.forEach { executeInstruction(it, true) }

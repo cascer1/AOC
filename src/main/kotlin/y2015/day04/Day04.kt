@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalTime::class, ExperimentalCoroutinesApi::class)
-
 package y2015.day04
 
 import kotlinx.coroutines.*
@@ -11,6 +9,7 @@ import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
+@OptIn(ExperimentalTime::class)
 fun main() {
     check(part1("abcdef") == 609043)
     println("Part 1.1 check done")
@@ -29,11 +28,11 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     return findFirstHash(input, "00000")
 }
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     return findFirstHash(input, "000000")
 }
 

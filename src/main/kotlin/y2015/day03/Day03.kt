@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalTime::class)
-
 package y2015.day03
 
 import TwoDimensionalCoordinates
@@ -13,6 +11,7 @@ var visited: HashSet<TwoDimensionalCoordinates> = hashSetOf()
 var currentPosition: TwoDimensionalCoordinates = TwoDimensionalCoordinates(0, 0)
 var robotPosition: TwoDimensionalCoordinates = TwoDimensionalCoordinates(0, 0)
 
+@OptIn(ExperimentalTime::class)
 fun main() {
     val inputFile = "2015/Day03"
     val input = readInput(inputFile)
@@ -27,13 +26,13 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     visited.add(currentPosition)
     parseInput(input).forEach { move(it, 0) }
     return visited.size
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     visited.clear()
     currentPosition = TwoDimensionalCoordinates(0,0)
     visited.add(currentPosition)

@@ -25,7 +25,7 @@ fun main() {
     println("Part 1 time: ${part1Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     parseInput(input)
 
     var oldPositions: Map<Pair<Int, Int>, Direction>

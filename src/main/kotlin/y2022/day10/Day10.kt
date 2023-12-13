@@ -26,7 +26,7 @@ fun main() {
     println("Part 1 time: ${part1Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     reset()
     input.forEach { instruction ->
         cycle++

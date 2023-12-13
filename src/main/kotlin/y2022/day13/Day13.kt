@@ -27,7 +27,7 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     val parsed = parseInput(input)
 
     return parsed.chunked(2)
@@ -36,7 +36,7 @@ fun part1(input: List<String>): Int {
         .sumOf { (i, _) -> i + 1 }
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     val parsed = parseInput(input)
     val distress = listOf(listOf(listOf(2)), listOf(listOf(6)))
     return parsed
@@ -59,8 +59,8 @@ fun String.parseLists(): Any {
     normalized.forEach {
         when (it) {
             "{" -> {
-                val m: MutableList<Any> = mutableListOf();
-                stack.last().add(m);
+                val m: MutableList<Any> = mutableListOf()
+                stack.last().add(m)
                 stack.add(m)
             }
 

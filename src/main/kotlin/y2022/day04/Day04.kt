@@ -29,13 +29,13 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     val pairs = parseInput(input)
 
     return pairs.count { it[0].containsAll(it[1]) || it[1].containsAll(it[0]) }
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     return parseInput(input).count { it[0].intersects(it[1])}
 }
 

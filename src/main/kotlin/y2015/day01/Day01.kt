@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalTime::class)
-
 package y2015.day01
 
 import readInput
@@ -8,6 +6,7 @@ import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
+@OptIn(ExperimentalTime::class)
 fun main() {
     val input = readInput("2015/Day01.txt")
     val part1Duration: Duration = measureTime {
@@ -21,11 +20,11 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     return parseInput(input).sum()
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     val parsed = parseInput(input)
     var currentPosition = 0
 

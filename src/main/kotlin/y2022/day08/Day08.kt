@@ -33,7 +33,7 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(): Int {
+private fun part1(): Int {
     var highestCount = 0
 
     trees.forEachIndexed { y, ints ->
@@ -47,7 +47,7 @@ fun part1(): Int {
     return highestCount
 }
 
-fun part2(): Int {
+private fun part2(): Int {
     return trees.flatMapIndexed { y, column ->
         column.mapIndexed { x, _ ->
             trees.scenicScoreAt(x, y)

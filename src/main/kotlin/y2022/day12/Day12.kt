@@ -48,12 +48,12 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     val map = parseInput(input, true)
     return findBestRoute(map, start)
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     val map = parseInput(input, false)
 
     return map.filterValues { it.height == "1".toByte() }.values.minOf {

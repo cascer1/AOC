@@ -41,7 +41,7 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): String {
+private fun part1(input: List<String>): String {
     parseInput(input)
 
     instructions.forEach { instruction ->
@@ -54,7 +54,7 @@ fun part1(input: List<String>): String {
     return stacks.map { it.firstOrNull() }.joinToString(separator = "")
 }
 
-fun part2(input: List<String>): String {
+private fun part2(input: List<String>): String {
     parseInput(input)
 
     instructions.forEach { instruction ->

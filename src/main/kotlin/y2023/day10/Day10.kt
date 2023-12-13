@@ -31,7 +31,7 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     val (pipes, startPipe) = parseInput(input)
 
     val distanceQueue = PriorityQueue<Pipe>(compareBy { it.distance })
@@ -54,7 +54,7 @@ fun part1(input: List<String>): Int {
     return maxDistance
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     val (pipes, startPipe) = parseInput(input)
 
     val distanceQueue = PriorityQueue<Pipe>(compareBy { it.distance })

@@ -28,7 +28,7 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Long {
+private fun part1(input: List<String>): Long {
     val steps = parseDirections(input.first())
     val nodes: HashMap<String, Node> = hashMapOf()
 
@@ -50,7 +50,7 @@ fun part1(input: List<String>): Long {
     return stepCount
 }
 
-fun part2(input: List<String>): Long {
+private fun part2(input: List<String>): Long {
     val steps = parseDirections(input.first())
     val nodes: HashMap<String, Node> = hashMapOf()
 

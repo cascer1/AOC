@@ -30,7 +30,7 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     val grid = parseInput(input)
     floorHeight = null
 
@@ -47,7 +47,7 @@ fun part1(input: List<String>): Int {
     return sandCount
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     val grid = parseInput(input)
 
     val range = grid.ranges()

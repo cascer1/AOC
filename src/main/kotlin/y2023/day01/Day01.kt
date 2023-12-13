@@ -48,7 +48,7 @@ fun main() {
 
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     return input.sumOf { takeFirstAndLastDigits(it) }
 }
 
@@ -57,7 +57,7 @@ fun takeFirstAndLastDigits(input: String): Int {
     return "${digits.first()}${digits.last()}".toInt()
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     return input
             .sumOf { replaceDigitWordsSmart(it) }
 }

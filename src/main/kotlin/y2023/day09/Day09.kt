@@ -26,12 +26,12 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     return input.map { line -> History(line.split(" ").map { it.toInt() }) }
             .sumOf { it.getNext() }
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     return input.map { line -> History(line.split(" ").map { it.toInt() }) }
             .sumOf { it.getPrevious() }
 }

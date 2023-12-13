@@ -26,11 +26,11 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     return input.map { Card(it) }.sumOf { it.score }
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     val countMap = HashMap<Int, Int>()
     input.map { Card(it) }.forEach { card ->
         incrementCount(countMap, card.id!!, 1)

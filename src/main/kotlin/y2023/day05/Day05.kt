@@ -28,7 +28,7 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Long {
+private fun part1(input: List<String>): Long {
     val mappings = HashMap<MappingMode, List<Mapping>>()
     var mappingMode = MappingMode.SEED_TO_SOIL
     var seeds: List<Long> = emptyList()
@@ -51,7 +51,7 @@ fun part1(input: List<String>): Long {
     return mapSeedsToLocations(seeds, mappings).min()
 }
 
-fun part2(input: List<String>): Long {
+private fun part2(input: List<String>): Long {
     val mappings = HashMap<MappingMode, List<Mapping>>()
     var mappingMode = MappingMode.SEED_TO_SOIL
     var seeds: List<Long> = emptyList()

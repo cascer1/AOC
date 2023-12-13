@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalTime::class)
-
 package y2015.day07
 
 import readInput
@@ -10,6 +8,7 @@ import kotlin.time.measureTime
 
 val wires: HashMap<String, Wire> = hashMapOf()
 
+@OptIn(ExperimentalTime::class)
 fun main() {
     val inputFile = "2015/Day07"
     val input = readInput(inputFile)
@@ -24,12 +23,12 @@ fun main() {
     println("Part 2 time: ${part2Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     parseInput(input)
     return wires["a"]!!.signal()!!.toInt()
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     parseInput(input)
     val a = wires["a"]!!.signal()!!
     wires.forEach { (_, u) -> u.reset() }
