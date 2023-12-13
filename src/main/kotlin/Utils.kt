@@ -7,7 +7,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 fun String.md5(): String =
-    BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray())).toString(16).padStart(32, '0')
+        BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray())).toString(16).padStart(32, '0')
 
 fun Byte.toggle(): Byte {
     if (this == 0x0.toByte()) {
@@ -50,17 +50,16 @@ inline fun <reified T> Array<Array<T>>.getColumn(x: Int): Array<T> {
     return returned.toTypedArray()
 }
 
-typealias Coordinate = Pair<Int, Int>
-
-fun Coordinate.x() = this.first
-
-fun Coordinate.getX() = this.first
-fun Coordinate.y() = this.second
-
-fun Coordinate.getY() = this.second
+data class Coordinate(var x: Int, var y: Int) {
+    fun manhattanDistance(other: Coordinate): Int {
+        val xDistance = abs(this.x - other.x)
+        val yDistance = abs(this.y - other.y)
+        return xDistance + yDistance
+    }
+}
 
 fun <T> Map<Coordinate, T>.getAt(x: Int, y: Int): T? {
-    return this[Pair(x, y)]
+    return this[Coordinate(x, y)]
 }
 
 fun <T> Map<Coordinate, T>.getAtOrDefault(x: Int, y: Int, default: T): T {
@@ -77,12 +76,12 @@ fun <T> Set<Pair<T, T>>.allEmpty(coordinates: Set<Pair<T, T>>): Boolean {
 
 fun <T> Map<Coordinate, T>.surroundingMatching(x: Int, y: Int, filter: (T) -> Boolean): ArrayList<T> {
     return ArrayList(
-        setOfNotNull(
-            this.getAt(x, y - 1), // above
-            this.getAt(x - 1, y), // left
-            this.getAt(x + 1, y), // right
-            this.getAt(x, y + 1)  // below
-        ).filter(filter)
+            setOfNotNull(
+                    this.getAt(x, y - 1), // above
+                    this.getAt(x - 1, y), // left
+                    this.getAt(x + 1, y), // right
+                    this.getAt(x, y + 1)  // below
+            ).filter(filter)
     )
 }
 
@@ -126,7 +125,6 @@ fun ArrayDeque<Char>.takeFirst(count: Int): String {
     return result.joinToString("")
 }
 
-
 fun IntRange.containsAll(other: IntRange): Boolean {
     return this.first <= other.first && this.last >= other.last
 }
@@ -149,9 +147,9 @@ fun IntRange.right(other: IntRange): IntRange {
 
 fun IntRange.split(other: IntRange): List<IntRange> {
     return listOf(
-        left(other),
-        center(other),
-        right(other)
+            left(other),
+            center(other),
+            right(other)
     ).filterNot { it.isEmpty() }
 }
 

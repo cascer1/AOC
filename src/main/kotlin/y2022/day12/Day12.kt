@@ -1,5 +1,6 @@
 package y2022.day12
 
+import Coordinate
 import getAt
 import readInput
 import surroundingMatching
@@ -8,20 +9,18 @@ import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
-var target = Pair(0, 0)
-var start = Pair(0, 0)
+var target = Coordinate(0, 0)
+var start = Coordinate(0, 0)
 
-private fun Map<Pair<Int, Int>, Point>.surroundingUnvisited(point: Point): ArrayList<Point> {
+private fun Map<Coordinate, Point>.surroundingUnvisited(point: Point): ArrayList<Point> {
     return this.surroundingMatching(point.x, point.y, Point::unvisited)
 }
 
-private fun Map<Pair<Int, Int>, Point>.copy(): Map<Pair<Int, Int>, Point> {
-    val returned = HashMap<Pair<Int, Int>, Point>()
+private fun Map<Coordinate, Point>.copy(): Map<Coordinate, Point> {
+    val returned = HashMap<Coordinate, Point>()
 
     this.forEach { (key, value) ->
-        val newKey = key.copy()
-        val newValue = value.copy()
-        returned[newKey] = newValue
+        returned[key.copy()] = value.copy()
     }
 
     return returned
@@ -57,17 +56,17 @@ private fun part2(input: List<String>): Int {
     val map = parseInput(input, false)
 
     return map.filterValues { it.height == "1".toByte() }.values.minOf {
-        findBestRoute(map.copy(), Pair(it.x, it.y))
+        findBestRoute(map.copy(), Coordinate(it.x, it.y))
     }
 }
 
-fun findBestRoute(map: Map<Pair<Int, Int>, Point>, start: Pair<Int, Int>): Int {
+fun findBestRoute(map: Map<Coordinate, Point>, start: Coordinate): Int {
     val pointQueue: ArrayDeque<Point> = ArrayDeque()
-    val startPoint = map.getAt(start.first, start.second)!!
+    val startPoint = map.getAt(start.x, start.y)!!
     startPoint.distance = 0
     pointQueue.add(startPoint)
 
-    while (!pointQueue.isEmpty()) {
+    while (pointQueue.isNotEmpty()) {
         val currentPoint = pointQueue.removeFirst()
         currentPoint.visited = true
 
@@ -81,15 +80,15 @@ fun findBestRoute(map: Map<Pair<Int, Int>, Point>, start: Pair<Int, Int>): Int {
         }
     }
 
-    val finish = map.getAt(target.first, target.second)!!
+    val finish = map.getAt(target.x, target.y)!!
     return finish.distance
 }
 
-fun parseInput(input: List<String>, startVisited: Boolean): HashMap<Pair<Int, Int>, Point> {
-    val points = HashMap<Pair<Int, Int>, Point>()
+fun parseInput(input: List<String>, startVisited: Boolean): HashMap<Coordinate, Point> {
+    val points = HashMap<Coordinate, Point>()
     input.forEachIndexed { y, row ->
         row.forEachIndexed { x, char ->
-            points[Pair(x, y)] = toPoint(char, x, y, startVisited)
+            points[Coordinate(x, y)] = toPoint(char, x, y, startVisited)
         }
     }
 
@@ -98,12 +97,12 @@ fun parseInput(input: List<String>, startVisited: Boolean): HashMap<Pair<Int, In
 
 fun toPoint(char: Char, x: Int, y: Int, startVisited: Boolean): Point {
     if (char == 'E') {
-        target = Pair(x, y)
+        target = Coordinate(x, y)
         return Point(height = 26, x = x, y = y)
     }
 
     if (char == 'S') {
-        start = Pair(x, y)
+        start = Coordinate(x, y)
         return Point(height = 1, visited = startVisited, x = x, y = y)
     }
 

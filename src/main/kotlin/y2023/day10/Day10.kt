@@ -2,8 +2,6 @@ package y2023.day10
 
 import Coordinate
 import getAt
-import getX
-import getY
 import readInput
 import java.util.PriorityQueue
 import kotlin.time.Duration
@@ -23,7 +21,7 @@ fun main() {
     }
     println("Part 1 time: ${part1Duration.toDouble(DurationUnit.MILLISECONDS)} ms")
 
-//    require(part2(readInput("2023/Day10_test2")) == 10) { "Part 2 check failed" }
+    require(part2(readInput("2023/Day10_test2")) == 10) { "Part 2 check failed" }
     val part2Duration: Duration = measureTime {
         println(part2(input))
     }
@@ -128,8 +126,8 @@ private fun addStartingPipes(pipes: MutableMap<Coordinate, Pipe>, startPipe: Pip
 }
 
 private fun printMap(pipes: Map<Coordinate, Pipe>) {
-    val maxX = pipes.maxOf { it.key.getX() }
-    val maxY = pipes.maxOf { it.key.getY() }
+    val maxX = pipes.maxOf { it.key.x }
+    val maxY = pipes.maxOf { it.key.y }
 
     (0..maxY).forEach { y ->
         (0..maxX).forEach { x ->
@@ -148,7 +146,7 @@ private fun printMap(pipes: Map<Coordinate, Pipe>) {
     }
 }
 
-private fun isEnclosed(map: Map<Pair<Int, Int>, Pipe>, pointX: Int, pointY: Int, maxX: Int, maxY: Int): Boolean {
+private fun isEnclosed(map: Map<Coordinate, Pipe>, pointX: Int, pointY: Int, maxX: Int, maxY: Int): Boolean {
     if (!hasPipesBelow(map, pointX, pointY, maxY)) {
         return false
     }
@@ -170,7 +168,7 @@ private fun isEnclosed(map: Map<Pair<Int, Int>, Pipe>, pointX: Int, pointY: Int,
     return horizontalCrossingNumber % 2 != 0 && verticalCrossingNumber % 2 != 0
 }
 
-private fun calculateHorizontalCrossingNumber(map: Map<Pair<Int, Int>, Pipe>, pointX: Int, pointY: Int): Int {
+private fun calculateHorizontalCrossingNumber(map: Map<Coordinate, Pipe>, pointX: Int, pointY: Int): Int {
     var crossingNumber = 0
 
     if (map.getAt(pointX, pointY) != null) {
@@ -213,7 +211,7 @@ private fun calculateHorizontalCrossingNumber(map: Map<Pair<Int, Int>, Pipe>, po
     return crossingNumber
 }
 
-private fun calculateVerticalCrossingNumber(map: Map<Pair<Int, Int>, Pipe>, pointX: Int, pointY: Int): Int {
+private fun calculateVerticalCrossingNumber(map: Map<Coordinate, Pipe>, pointX: Int, pointY: Int): Int {
     var crossingNumber = 0
 
     if (map.getAt(pointX, pointY) != null) {
@@ -256,19 +254,19 @@ private fun calculateVerticalCrossingNumber(map: Map<Pair<Int, Int>, Pipe>, poin
     return crossingNumber
 }
 
-private fun hasPipesToRight(map: Map<Pair<Int, Int>, Pipe>, pointX: Int, pointY: Int, maxX: Int): Boolean {
+private fun hasPipesToRight(map: Map<Coordinate, Pipe>, pointX: Int, pointY: Int, maxX: Int): Boolean {
     return (pointX..maxX).any { x -> map.getAt(x, pointY) != null }
 }
 
-private fun hasPipesLeft(map: Map<Pair<Int, Int>, Pipe>, pointX: Int, pointY: Int): Boolean {
+private fun hasPipesLeft(map: Map<Coordinate, Pipe>, pointX: Int, pointY: Int): Boolean {
     return (0..pointX).any { x -> map.getAt(x, pointY) != null }
 }
 
-private fun hasPipesBelow(map: Map<Pair<Int, Int>, Pipe>, pointX: Int, pointY: Int, maxY: Int): Boolean {
+private fun hasPipesBelow(map: Map<Coordinate, Pipe>, pointX: Int, pointY: Int, maxY: Int): Boolean {
     return (pointY..maxY).any { y -> map.getAt(pointX, y) != null }
 }
 
-private fun hasPipesAbove(map: Map<Pair<Int, Int>, Pipe>, pointX: Int, pointY: Int): Boolean {
+private fun hasPipesAbove(map: Map<Coordinate, Pipe>, pointX: Int, pointY: Int): Boolean {
     return (0..pointY).any { y -> map.getAt(pointX, y) != null }
 }
 

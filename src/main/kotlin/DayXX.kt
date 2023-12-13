@@ -24,17 +24,9 @@ fun main() {
 }
 
 private fun part1(input: List<String>): Int {
-    parseInput(input)
-
     return 1
 }
 
 private fun part2(input: List<String>): Int {
-    parseInput(input)
-
     return 2
-}
-
-fun parseInput(input: List<String>) {
-    println("parsing")
 }

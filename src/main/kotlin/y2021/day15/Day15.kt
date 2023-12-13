@@ -2,6 +2,7 @@
 
 package y2021.day15
 
+import Coordinate
 import getAt
 import readInput
 import kotlin.time.Duration
@@ -9,12 +10,12 @@ import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
-private var map: HashMap<Pair<Int, Int>, Point> = HashMap()
+private var map: HashMap<Coordinate, Point> = HashMap()
 
 private var width: Int = 0
 private var height: Int = 0
 
-private fun HashMap<Pair<Int, Int>, Point>.surroundingUnvisited(x: Int, y: Int): ArrayList<Point> {
+private fun HashMap<Coordinate, Point>.surroundingUnvisited(x: Int, y: Int): ArrayList<Point> {
     return ArrayList(setOfNotNull(
             this.getAt(x, y - 1), // above
             this.getAt(x - 1, y), // left
@@ -23,7 +24,7 @@ private fun HashMap<Pair<Int, Int>, Point>.surroundingUnvisited(x: Int, y: Int):
     ).filter { !it.visited })
 }
 
-private fun HashMap<Pair<Int, Int>, Point>.surroundingUnvisited(point: Point): ArrayList<Point> {
+private fun HashMap<Coordinate, Point>.surroundingUnvisited(point: Point): ArrayList<Point> {
     return this.surroundingUnvisited(point.x, point.y)
 }
 
@@ -34,7 +35,7 @@ private fun parseInput(input: List<String>) {
     map.clear()
     input.forEachIndexed { y, row ->
         row.forEachIndexed { x, risk ->
-            map[Pair(x, y)] = Point(x, y, risk.digitToInt())
+            map[Coordinate(x, y)] = Point(x, y, risk.digitToInt())
         }
     }
 }
@@ -79,7 +80,7 @@ private fun findBestRoute(): Int {
     start.distance = 0
     pointQueue.add(start)
 
-    while (!pointQueue.isEmpty()) {
+    while (pointQueue.isNotEmpty()) {
         val currentPoint = pointQueue.removeFirst()
         currentPoint.visited = true
 
@@ -106,7 +107,7 @@ private fun expandMap() {
         (original until offset).forEach { x ->
             (0 until height).forEach { y ->
                 val originalPoint = map.getAt(x, y)!!
-                map[Pair(x + difference, y)] = Point(x + difference, y, if (originalPoint.risk < 9) originalPoint.risk + 1 else 1)
+                map[Coordinate(x + difference, y)] = Point(x + difference, y, if (originalPoint.risk < 9) originalPoint.risk + 1 else 1)
             }
         }
     }
@@ -121,7 +122,7 @@ private fun expandMap() {
         (0..originalWidth).forEach { x ->
             (original until offset).forEach { y ->
                 val originalPoint = map.getAt(x, y)!!
-                map[Pair(x, y + difference)] = Point(x, y + difference, if (originalPoint.risk < 9) originalPoint.risk + 1 else 1)
+                map[Coordinate(x, y + difference)] = Point(x, y + difference, if (originalPoint.risk < 9) originalPoint.risk + 1 else 1)
             }
         }
     }
