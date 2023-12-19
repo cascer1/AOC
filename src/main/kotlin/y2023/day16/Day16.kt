@@ -3,8 +3,6 @@ package y2023.day16
 import Coordinate
 import Direction
 import readInput
-import java.util.PriorityQueue
-import java.util.Queue
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
