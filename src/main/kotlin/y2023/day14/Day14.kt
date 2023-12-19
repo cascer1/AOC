@@ -96,6 +96,7 @@ private fun moveRocks(rocks: HashSet<Rock>, direction: Direction, maxX: Int, max
 }
 
 private fun parseInput(input: List<String>): HashSet<Rock> {
+    // Could be greatly optimized by storing rocks in a 2d array, or Map<Coordinate, Rock>
     return input.flatMapIndexed { y, row ->
         row.mapIndexedNotNull { x, char ->
             if (char == 'O') {
