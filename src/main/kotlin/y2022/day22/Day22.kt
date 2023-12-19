@@ -1,5 +1,6 @@
 package y2022.day22
 
+import Coordinate
 import readInput
 import java.util.*
 import kotlin.collections.HashMap
@@ -8,8 +9,7 @@ import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
-typealias Coordinate = Pair<Int, Int>
-typealias CoordinateMap = HashMap<Coordinate, Boolean>
+private typealias CoordinateMap = HashMap<Coordinate, Boolean>
 
 val directions = arrayOf('>', 'v', '<', '^')
 
@@ -92,13 +92,13 @@ fun moveRight(position: Coordinate, map: CoordinateMap, distance: Int): Coordina
             x++
         }
 
-        val walkable = map[Pair(x, y)]!!
+        val walkable = map[Coordinate(x, y)]!!
 
         if (!walkable) {
             return newPosition
         }
 
-        newPosition = newPosition.copy(first = x)
+        newPosition = newPosition.copy(x = x)
     }
 
     return newPosition
@@ -119,13 +119,13 @@ fun moveDown(position: Coordinate, map: CoordinateMap, distance: Int): Coordinat
             y++
         }
 
-        val walkable = map[Pair(x, y)]!!
+        val walkable = map[Coordinate(x, y)]!!
 
         if (!walkable) {
             return newPosition
         }
 
-        newPosition = newPosition.copy(second = y)
+        newPosition = newPosition.copy(y = y)
     }
 
     return newPosition
@@ -146,13 +146,13 @@ fun moveLeft(position: Coordinate, map: CoordinateMap, distance: Int): Coordinat
             x--
         }
 
-        val walkable = map[Pair(x, y)]!!
+        val walkable = map[Coordinate(x, y)]!!
 
         if (!walkable) {
             return newPosition
         }
 
-        newPosition = newPosition.copy(first = x)
+        newPosition = newPosition.copy(x = x)
     }
 
     return newPosition
@@ -173,13 +173,13 @@ fun moveUp(position: Coordinate, map: CoordinateMap, distance: Int): Coordinate 
             y--
         }
 
-        val walkable = map[Pair(x, y)]!!
+        val walkable = map[Coordinate(x, y)]!!
 
         if (!walkable) {
             return newPosition
         }
 
-        newPosition = newPosition.copy(second = y)
+        newPosition = newPosition.copy(y = y)
     }
 
     return newPosition
@@ -197,15 +197,15 @@ private fun part2(input: List<String>, segmentSize: Int): Int {
     return 2
 }
 
-fun parseMap(input: List<String>): CoordinateMap {
+private fun parseMap(input: List<String>): CoordinateMap {
     val returned = CoordinateMap()
 
     input.forEachIndexed { y, line ->
         line.forEachIndexed { x, char ->
             if (char == '.') {
-                returned[Pair(x + 1, y + 1)] = true
+                returned[Coordinate(x + 1, y + 1)] = true
             } else if (char == '#') {
-                returned[Pair(x + 1, y + 1)] = false
+                returned[Coordinate(x + 1, y + 1)] = false
             }
         }
     }

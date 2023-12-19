@@ -6,7 +6,7 @@ import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
-val digits = arrayOf(
+private val digits = arrayOf(
         Digit("one", "1"),
         Digit("two", "2"),
         Digit("three", "3"),
@@ -62,7 +62,7 @@ private fun part2(input: List<String>): Int {
             .sumOf { replaceDigitWordsSmart(it) }
 }
 
-fun replaceDigitWordsSmart(input: String): Int {
+private fun replaceDigitWordsSmart(input: String): Int {
     val firstDigit: String
     val lastDigit: String
 
@@ -80,7 +80,7 @@ fun replaceDigitWordsSmart(input: String): Int {
     return (firstDigit + lastDigit).toInt()
 }
 
-fun getDigitIndices(input: String, digit: Digit): Set<DigitPosition> {
+private fun getDigitIndices(input: String, digit: Digit): Set<DigitPosition> {
     val indices = ArrayList<Int>()
     var index: Int = input.indexOf(digit.word)
     while (index >= 0) {
@@ -91,8 +91,8 @@ fun getDigitIndices(input: String, digit: Digit): Set<DigitPosition> {
     return indices.map { DigitPosition(digit, it) }.toSet()
 }
 
-class Digit(val word: String, val value: String)
-class DigitPosition(val digit: Digit, val position: Int) {
+private class Digit(val word: String, val value: String)
+private class DigitPosition(val digit: Digit, val position: Int) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is DigitPosition) return false

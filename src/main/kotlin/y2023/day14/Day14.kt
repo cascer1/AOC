@@ -1,5 +1,6 @@
 package y2023.day14
 
+import CardinalDirection
 import readInput
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
@@ -31,7 +32,7 @@ private fun part1(input: List<String>): Int {
     val maxY = input.size - 1
     val maxX = rocks.maxOf { it.x }
 
-    rocks = moveRocks(rocks, Direction.NORTH, maxX, maxY)
+    rocks = moveRocks(rocks, CardinalDirection.NORTH, maxX, maxY)
 
     return rocks.filter { it.movable }.sumOf { maxY - it.y + 1 }
 }
@@ -63,10 +64,10 @@ private fun part2(input: List<String>, cycles: Int): Int {
             rocks = cache.getValue(rocks)
         } else {
             hits = 0
-            var next = moveRocks(rocks, Direction.NORTH, maxX, maxY)
-            next = moveRocks(next, Direction.WEST, maxX, maxY)
-            next = moveRocks(next, Direction.SOUTH, maxX, maxY)
-            next = moveRocks(next, Direction.EAST, maxX, maxY)
+            var next = moveRocks(rocks, CardinalDirection.NORTH, maxX, maxY)
+            next = moveRocks(next, CardinalDirection.WEST, maxX, maxY)
+            next = moveRocks(next, CardinalDirection.SOUTH, maxX, maxY)
+            next = moveRocks(next, CardinalDirection.EAST, maxX, maxY)
             cache[rocks] = next
             rocks = next
         }
@@ -80,7 +81,7 @@ private fun part2(input: List<String>, cycles: Int): Int {
     return rocks.filter { it.movable }.sumOf { maxY - it.y + 1 }
 }
 
-private fun moveRocks(rocks: HashSet<Rock>, direction: Direction, maxX: Int, maxY: Int): HashSet<Rock> {
+private fun moveRocks(rocks: HashSet<Rock>, direction: CardinalDirection, maxX: Int, maxY: Int): HashSet<Rock> {
     var newRocks: HashSet<Rock>
     var oldRocks = rocks
 
@@ -111,29 +112,29 @@ private fun parseInput(input: List<String>): HashSet<Rock> {
 }
 
 data class Rock(var x: Int, var y: Int, val movable: Boolean) {
-    fun canMove(rocks: HashSet<Rock>, direction: Direction, maxX: Int, maxY: Int): Boolean {
+    fun canMove(rocks: HashSet<Rock>, direction: CardinalDirection, maxX: Int, maxY: Int): Boolean {
         if (!movable) {
             return false
         }
 
         return when (direction) {
-            Direction.NORTH -> rocks.none { it.x == x && it.y == y - 1 } && y > 0
-            Direction.SOUTH -> rocks.none { it.x == x && it.y == y + 1 } && y < maxY
-            Direction.WEST -> rocks.none { it.x == x - 1 && it.y == y } && x > 0
-            Direction.EAST -> rocks.none { it.x == x + 1 && it.y == y } && x < maxX
+            CardinalDirection.NORTH -> rocks.none { it.x == x && it.y == y - 1 } && y > 0
+            CardinalDirection.SOUTH -> rocks.none { it.x == x && it.y == y + 1 } && y < maxY
+            CardinalDirection.WEST -> rocks.none { it.x == x - 1 && it.y == y } && x > 0
+            CardinalDirection.EAST -> rocks.none { it.x == x + 1 && it.y == y } && x < maxX
         }
     }
 
-    fun move(rocks: HashSet<Rock>, direction: Direction, maxX: Int, maxY: Int): Rock {
+    fun move(rocks: HashSet<Rock>, direction: CardinalDirection, maxX: Int, maxY: Int): Rock {
         if (!canMove(rocks, direction, maxX, maxY)) {
             return this.copy()
         }
 
         return when (direction) {
-            Direction.NORTH -> this.copy(y = y - 1)
-            Direction.SOUTH -> this.copy(y = y + 1)
-            Direction.WEST -> this.copy(x = x - 1)
-            Direction.EAST -> this.copy(x = x + 1)
+            CardinalDirection.NORTH -> this.copy(y = y - 1)
+            CardinalDirection.SOUTH -> this.copy(y = y + 1)
+            CardinalDirection.WEST -> this.copy(x = x - 1)
+            CardinalDirection.EAST -> this.copy(x = x + 1)
         }
     }
 
@@ -156,8 +157,4 @@ data class Rock(var x: Int, var y: Int, val movable: Boolean) {
     }
 
 
-}
-
-enum class Direction {
-    NORTH, SOUTH, WEST, EAST
 }

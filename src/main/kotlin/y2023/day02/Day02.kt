@@ -38,7 +38,7 @@ private fun part2(input: List<String>): Int {
         .sumOf { it.power }
 }
 
-fun parseGame(input: String): Game {
+private fun parseGame(input: String): Game {
     // Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
     val (gameIdString, handsString) = input.split(": ")
     val handStrings = handsString.split("; ")
@@ -66,7 +66,7 @@ fun parseGame(input: String): Game {
     return Game(gameId, colorCounts)
 }
 
-class Game(val id: Int, private val hands: List<ColorCount>) {
+private class Game(val id: Int, private val hands: List<ColorCount>) {
     fun isPossible(colorCount: ColorCount): Boolean {
         return hands.all { it.isPossible(colorCount) }
     }
@@ -93,7 +93,7 @@ class Game(val id: Int, private val hands: List<ColorCount>) {
         }
 }
 
-class ColorCount(val red: Int, val green: Int, val blue: Int) {
+private class ColorCount(val red: Int, val green: Int, val blue: Int) {
     fun isPossible(limit: ColorCount): Boolean {
         return (red <= limit.red && green <= limit.green && blue <= limit.blue)
     }

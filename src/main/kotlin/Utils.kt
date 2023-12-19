@@ -25,6 +25,14 @@ fun Int.toggle(): Int {
  */
 fun readInput(name: String) = File("inputs", "$name.txt").readLines()
 
+enum class CardinalDirection {
+    NORTH, SOUTH, WEST, EAST
+}
+
+enum class Direction {
+    UP, DOWN, LEFT, RIGHT
+}
+
 /**
  * Get the item at index[x][y], or return the unknown value if none is found
  */
@@ -51,6 +59,12 @@ inline fun <reified T> Array<Array<T>>.getColumn(x: Int): Array<T> {
 }
 
 data class Coordinate(var x: Int, var y: Int) {
+    val first: Int
+        get() = x
+
+    val second: Int
+        get() = y
+
     fun manhattanDistance(other: Coordinate): Int {
         val xDistance = abs(this.x - other.x)
         val yDistance = abs(this.y - other.y)
