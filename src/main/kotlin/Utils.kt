@@ -58,19 +58,7 @@ inline fun <reified T> Array<Array<T>>.getColumn(x: Int): Array<T> {
     return returned.toTypedArray()
 }
 
-data class Coordinate(var x: Int, var y: Int) {
-    val first: Int
-        get() = x
-
-    val second: Int
-        get() = y
-
-    fun manhattanDistance(other: Coordinate): Int {
-        val xDistance = abs(this.x - other.x)
-        val yDistance = abs(this.y - other.y)
-        return xDistance + yDistance
-    }
-}
+typealias Coordinate = TwoDimensionalCoordinates
 
 fun <T> Map<Coordinate, T>.getAt(x: Int, y: Int): T? {
     return this[Coordinate(x, y)]
@@ -126,6 +114,41 @@ fun <T> Array<Array<T>>.get(predicate: Predicate<T>): Set<T> {
     }.toSet()
 }
 
+fun <T> Array<Array<T>>.getSurrounding(x: Int, y: Int): Set<T> {
+    return setOfNotNull(
+            this.getAt(x, y - 1), // above
+            this.getAt(x - 1, y), // left
+            this.getAt(x + 1, y), // right
+            this.getAt(x, y + 1)  // below
+    )
+}
+
+fun <T> Array<Array<T>>.getSurrounding(x: Int, y: Int, allowedDirections: Set<Direction>): Set<T> {
+    val returned = HashSet<T>()
+    if (allowedDirections.contains(Direction.UP)) {
+        this.getAt(x, y - 1)?.let { returned.add(it) }
+    }
+    if (allowedDirections.contains(Direction.LEFT)) {
+        this.getAt(x - 1, y)?.let { returned.add(it) }
+    }
+    if (allowedDirections.contains(Direction.RIGHT)) {
+        this.getAt(x + 1, y)?.let { returned.add(it) }
+    }
+    if (allowedDirections.contains(Direction.DOWN)) {
+        this.getAt(x, y + 1)?.let { returned.add(it) }
+    }
+    return returned
+}
+
+fun <T> Array<Array<T>>.getSurroundingMatching(x: Int, y: Int, predicate: Predicate<T>): Set<T> {
+    return setOfNotNull(
+            this.getAt(x, y - 1), // above
+            this.getAt(x - 1, y), // left
+            this.getAt(x + 1, y), // right
+            this.getAt(x, y + 1)  // below
+    ).filter { predicate.test(it) }.toSet()
+}
+
 /**
  * Get the first x items in the deque as string
  */
@@ -167,13 +190,25 @@ fun IntRange.split(other: IntRange): List<IntRange> {
     ).filterNot { it.isEmpty() }
 }
 
-open class TwoDimensionalCoordinates(var x: Int, var y: Int) {
+data class TwoDimensionalCoordinates(var x: Int, var y: Int) {
     companion object {
         @JvmStatic
         fun fromString(input: String): TwoDimensionalCoordinates {
             val (x, y) = input.split(',').map { it.toInt() }
             return TwoDimensionalCoordinates(x, y)
         }
+    }
+
+    val first: Int
+        get() = x
+
+    val second: Int
+        get() = y
+
+    fun manhattanDistance(other: TwoDimensionalCoordinates): Int {
+        val xDistance = abs(this.x - other.x)
+        val yDistance = abs(this.y - other.y)
+        return xDistance + yDistance
     }
 
     override fun equals(other: Any?): Boolean {
