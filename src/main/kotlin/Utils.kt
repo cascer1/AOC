@@ -76,6 +76,22 @@ fun <T> Set<Pair<T, T>>.allEmpty(coordinates: Set<Pair<T, T>>): Boolean {
     return coordinates.none { this.contains(it) }
 }
 
+fun Set<Coordinate>.hasAbove(coordinate: Coordinate): Boolean {
+    return this.contains(coordinate.copy(y = coordinate.y - 1))
+}
+
+fun Set<Coordinate>.hasBelow(coordinate: Coordinate): Boolean {
+    return this.contains(coordinate.copy(y = coordinate.y + 1))
+}
+
+fun Set<Coordinate>.hasLeft(coordinate: Coordinate): Boolean {
+    return this.contains(coordinate.copy(x = coordinate.x - 1))
+}
+
+fun Set<Coordinate>.hasRight(coordinate: Coordinate): Boolean {
+    return this.contains(coordinate.copy(x = coordinate.x + 1))
+}
+
 fun <T> Map<Coordinate, T>.surroundingMatching(x: Int, y: Int, filter: (T) -> Boolean): ArrayList<T> {
     return ArrayList(
             setOfNotNull(
@@ -89,6 +105,22 @@ fun <T> Map<Coordinate, T>.surroundingMatching(x: Int, y: Int, filter: (T) -> Bo
 
 fun <T> HashMap<Coordinate, T>.getAtOrDefault(x: Int, y: Int, default: T): T {
     return this.getAt(x, y) ?: default
+}
+
+fun <T> HashMap<Coordinate, T>.hasKeyBelow(coordinate: Coordinate): Boolean {
+    return this.containsKey(coordinate.copy(y = coordinate.y + 1))
+}
+
+fun <T> HashMap<Coordinate, T>.hasKeyAbove(coordinate: Coordinate): Boolean {
+    return this.containsKey(coordinate.copy(y = coordinate.y - 1))
+}
+
+fun <T> HashMap<Coordinate, T>.hasKeyLeft(coordinate: Coordinate): Boolean {
+    return this.containsKey(coordinate.copy(x = coordinate.x - 1))
+}
+
+fun <T> HashMap<Coordinate, T>.hasKeyRight(coordinate: Coordinate): Boolean {
+    return this.containsKey(coordinate.copy(x = coordinate.x + 1))
 }
 
 fun <K> HashMap<K, Long>.addCount(sequence: K, amount: Long) {
@@ -190,7 +222,7 @@ fun IntRange.split(other: IntRange): List<IntRange> {
     ).filterNot { it.isEmpty() }
 }
 
-data class TwoDimensionalCoordinates(var x: Int, var y: Int) {
+data class TwoDimensionalCoordinates(var x: Int, var y: Int, var direction: Direction? = null) {
     companion object {
         @JvmStatic
         fun fromString(input: String): TwoDimensionalCoordinates {
